@@ -210,7 +210,7 @@ recipe4 <- function(x) {
   }
 }
 
-recipe5 <- function(x) {
+recipe5 <- function(x) { # Look into if and else functions to understand better
   if(x < 3) {
     x*2
   } 
