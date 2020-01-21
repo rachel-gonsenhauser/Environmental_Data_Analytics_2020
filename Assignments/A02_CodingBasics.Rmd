@@ -71,10 +71,10 @@ names(dataframe1) <- c("Name","Score","Pass?"); View(dataframe1)
 ```{r}
 grade <- function(x) {
   if(x > 50) {
-    x == "PASS"
+    print("PASS")
   } 
   else {
-    x == "FAIL"
+    print("FAIL")
   }
 }
 passing_grade <- grade(46); passing_grade
