@@ -46,7 +46,8 @@ At the top of your R scripts, you should load any packages that need to be used 
 
 At the same time, you should also load your theme if you are doing any data visualization with ggplot. More on this later.
 
-```{r, message = FALSE}
+```{r, message = FALSE} 
+# If trying to load tidyverse make sure message = FALSE
 # Load package
 library(tidyverse)
 ```
@@ -62,15 +63,18 @@ You may also import datasets from the Files tab, but this is not recommended sin
 ```{r}
 # Absolute file path (not recommended)
 #read.csv("/Users/katerisalk/Documents/Duke/Courses/Environmental_Data_Analytics/Data/Raw/USGS_Site02085000_Flow_Raw.csv")
+# Can't find because we all have different machines, so do not use absolute file path
 
 # Relative file path (friendly for users regardless of machine)
+# . means go in one folder, .. means go out one folder
+# Want to do this every time rather than just uploading the dataset from folders because this is reproducible
 USGS.flow.data <- read.csv("./Data/Raw/USGS_Site02085000_Flow_Raw.csv")
 
-# What happens if we don't assign a name to our imported dataset?
-#read.csv("../Data/Raw/USGS_Site02085000_Flow_Raw.csv")
+# What happens if we don't assign a name to our imported dataset? Just comes up in the console
+#read.csv("./Data/Raw/USGS_Site02085000_Flow_Raw.csv")
 
-# Another option is to choose with your browser
-# read.csv(file.choose())
+# Another option is to choose with your browser, not reproducible though so not recommended
+#read.csv(file.choose())
 
 # To import .txt files, use read.table rather than read.csv
 #read.table()
@@ -80,16 +84,18 @@ USGS.flow.data <- read.csv("./Data/Raw/USGS_Site02085000_Flow_Raw.csv")
 ## EXPLORE YOUR DATASET
 
 Take a moment to read through the README file associated with the USGS dataset on discharge at the Eno River. Where can you find this file? How does the placement and information found in this file relate to the best practices for reproducible data analysis?
-> ANSWER: 
+> ANSWER: The file was found in the Metadata folder. The information in the README file relates to best practices for reproducible data analysis because it steps through exactly how to download the data from the USGS site. Also, naming conventions are given to provide a systematic way to collaborate on files.
 
 ```{r}
 View(USGS.flow.data)
 # Alternate option: click on data frame in Environment tab
 
-class(USGS.flow.data)
+class(USGS.flow.data) #dataframe because it has different types of data and is a two dimensional dataset
 colnames(USGS.flow.data)
 
-# Rename columns
+# Rename columns to make more straightforward, need to list all column names
+# If you only want to rename certain columns, need to subset e.g. colnames(USGS.flow.data)[3] <-c("datetime") if you want to just change column 3
+#Try not to go over 80 characters per line, put returns between col names
 colnames(USGS.flow.data) <- c("agency_cd", "site_no", "datetime", 
                               "discharge.max", "discharge.max.approval", 
                               "discharge.min", "discharge.min.approval", 
@@ -97,9 +103,10 @@ colnames(USGS.flow.data) <- c("agency_cd", "site_no", "datetime",
                               "gage.height.max", "gage.height.max.approval", 
                               "gage.height.min", "gage.height.min.approval", 
                               "gage.height.mean", "gage.height.mean.approval")
-str(USGS.flow.data)
-dim(USGS.flow.data)
-length(USGS.flow.data)
+str(USGS.flow.data) # Asking for the structure of the data frame
+dim(USGS.flow.data) # Dimensions of data frame (# rows and columns)
+length(USGS.flow.data) # Length gives you the number of columns
+nrow(USGS.flow.data) # Number of rows in data frame
 
 head(USGS.flow.data)
 head(USGS.flow.data, 10)
@@ -110,21 +117,21 @@ class(USGS.flow.data$datetime)
 class(USGS.flow.data$discharge.mean)
 class(USGS.flow.data$gage.height.mean)
 
-summary(USGS.flow.data)
+summary(USGS.flow.data) # Summary stats for dataset
 
 ```
 
 What happened to blank cells in the spreadsheet when they were imported into R?
-> Answer: 
+> Answer: Come up as NA
 
 ## Adjusting Datasets
 
 ### Removing NAs
 
-Notice in our dataset that our discharge and gage height observations have many NAs, meaning no measurement was recorded for a specific day. In some cases, it might be in our best interest to remove NAs from a dataset. Removing NAs or not will depend on your research question.
+Notice in our dataset that our discharge and gage height observations have many NAs, meaning no measurement was recorded for a specific day. In some cases, it might be in our best interest to remove NAs from a dataset. Removing NAs or not will depend on your research question. 
 
-```{r}
-summary(USGS.flow.data$discharge.mean)
+```{r} 
+summary(USGS.flow.data$discharge.mean) 
 summary(USGS.flow.data$gage.height.mean)
 ```
 Question: What types of research questions might make it favorable to remove NAs from a dataset, and what types of research questions might make it favorable to retain NAs in the dataset?
@@ -132,7 +139,7 @@ Question: What types of research questions might make it favorable to remove NAs
 > Answer: 
 
 ```{r}
-USGS.flow.data.complete <- na.omit(USGS.flow.data)
+USGS.flow.data.complete <- na.omit(USGS.flow.data) # If you remove an NA, it omits the entire row from the dataset, will only include the complete cases within the data frame
 dim(USGS.flow.data)
 dim(USGS.flow.data.complete)
 
@@ -144,7 +151,7 @@ summary(USGS.flow.data.complete$discharge.mean)
 
 ### Formatting dates
 
-R will often import dates as factors or characters rather than dates. To fix, this we need to tell R that it is looking at dates. We also need to specify the format the dates are in. By default, if you don't provide a format, R will attempt to use %Y-%m-%d or %Y/%m/%d as a default. Note: if you are working collaboratively in an international setting, using a year-month-day format in spreadsheets is the least ambiguous of date formats. Make sure to check whether month-day-year or day-month-year is used in an ambiguously formatted spreadsheet.
+R will often import dates as factors or characters rather than dates. To fix, this we need to tell R that it is looking at dates. We also need to specify the format the dates are in. By default, if you don't provide a format, R will attempt to use %Y-%m-%d or %Y/%m/%d as a default. Note: if you are working collaboratively in an international setting, using a year-month-day format in spreadsheets is the least ambiguous of date formats. Make sure to check whether month-day-year or day-month-year is used in an ambiguously formatted spreadsheet. If R prompts you to set to origin, you should set this as January 1, 1970.
 
 Formatting of dates in R: 
 
@@ -168,11 +175,13 @@ help(as.Date)
 # (code must be uncommented)
 today <- Sys.Date()
 format(today, format = "%B")
-#format(today, format = "")
-#format(today, format = "")
-#format(today, format = "")
+format(today, format = "%A")
+format(today, format = "%d")
+format(today, format = "%Y")
 
-USGS.flow.data$datetime <- as.Date(USGS.flow.data$datetime, format = "%m/%d/%y") 
+USGS.flow.data$datetime <- as.Date(USGS.flow.data$datetime, format = "%m/%d/%y")
+# Need to tell R the format the date exists in right now in the dataset, not the format we want it in
+# Column datetime coded as $datetime
 ```
 
 Note that for every date prior to 1969, R has assigned the date in the 2000s rather than the 1900s. This can be fixed with an `ifelse` statement inside a function. Run through the code below and write what is happening in the comment above each line.
@@ -181,7 +190,7 @@ Note that for every date prior to 1969, R has assigned the date in the 2000s rat
 # 
 USGS.flow.data$datetime <- format(USGS.flow.data$datetime, "%y%m%d")
 
-#
+# Building a function to fix dates from 2000s to 1999s
 create.early.dates <- (function(d) {
        paste0(ifelse(d > 181231,"19","20"),d)
        })
@@ -200,7 +209,7 @@ We just edited our raw dataset into a processed form. We may want to return to t
 
 ```{r}
 write.csv(USGS.flow.data, file = "./Data/Processed/USGS_Site02085000_Flow_Processed.csv", row.names=FALSE)
-
+# Created processed data file once you make a folder for it to live in
 ```
 
 
