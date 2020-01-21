@@ -69,17 +69,12 @@ names(dataframe1) <- c("Name","Score","Pass?"); View(dataframe1)
 11. Apply your function to the vector with test scores that you created in number 5. 
 
 ```{r}
-grade <- function(x) {
-  if(x > 50) {
-    print("PASS")
-  } 
-  else {
-    print("FAIL")
-  }
-}
-passing_grade <- grade(46); passing_grade
+grade2 <- function(x) {
+  ifelse(x > 50, "PASS","FAIL") }
+
+grade2(vector_score)
 ```
 
 12. QUESTION: Which option of `if` and `else` vs. `ifelse` worked? Why?
 
-> Answer: 
+> Answer: The 'ifelse' option worked. The 'if' command can only be run if a vector has one object. Since the vector created for students' scores has four objects, the 'if' and 'else' option returned a warning and would not work.
