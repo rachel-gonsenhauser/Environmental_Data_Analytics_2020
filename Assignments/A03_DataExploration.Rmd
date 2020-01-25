@@ -26,7 +26,9 @@ The completed exercise is due on Tuesday, January 28 at 1:00 pm.
 getwd()
 library(tidyverse)
 Neonics <- read.csv("~/Documents/Environmental_Data_Analytics_2020/Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv")
+# View(Neonics)
 Litter <- read.csv("~/Documents/Environmental_Data_Analytics_2020/Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv")
+# View(Litter)
 ```
 
 ## Learn about your system
@@ -42,9 +44,9 @@ Litter <- read.csv("~/Documents/Environmental_Data_Analytics_2020/Data/Raw/NEON_
 4. How is litter and woody debris sampled as part of the NEON network? Read the NEON_Litterfall_UserGuide.pdf document to learn more. List three pieces of salient information about the sampling methods here: 
 
 > Answer: 
-*
-*
-*
+*Litter and fine woody debris is sampled at terrestrial NEON sites that house woody vegetation >2m tall, with sampling occuring in tower plots whose locations were selected randomly within the 90% flux footprint of primary and secondary airsheds.
+*Trap placement within plots were targeted or randomized depending on vegetation (e.g. in sites with more than 50% aerial cover of woody vegetation >2m tall, placement of traps was raondomized).
+*Ground traps are sampled once per year whereas sampling frequency for elevated traps varies by site vegetation, with deciduous forest sites being sampled more frequently than evergreen sites.
 
 
 
@@ -52,32 +54,36 @@ Litter <- read.csv("~/Documents/Environmental_Data_Analytics_2020/Data/Raw/NEON_
 
 5. What are the dimensions of the dataset?
 
-```{r}
 
+```{r}
+dim(Neonics)
 ```
+
+> Answer: The dimensions of the dataset are 4,623 rows by 30 columns.
 
 6. Using the `summary` function, determine the most common effects that are studied. Why might these effects specifically be of interest?
 ```{r}
-
+summary(Neonics$Effect)
 ```
 
-> Answer: 
+> Answer: The most common effects studied include population, mortality, behavior, feeding behavior, reproduction, and development. These effects were measured by abudance, mortality, survival, progency count, food consumption, and emergence, respectively. These effects might be of interest because testing these effects can reveal information about insect populations' responses to different doses of and means of exposure to neonicotinoids. Studying these effects in this context also allows cross-species comparisons of how the effects of different exposure manifest in different insects.
 
 7. Using the `summary` function, determine the six most commonly studied species in the dataset (common name). What do these species have in common, and why might they be of interest over other insects? Feel free to do a brief internet search for more information if needed.
 
 ```{r}
-
+summary(Neonics$Species.Common.Name)
 ```
 
-> Answer: 
+> Answer: The six most commonly studied species in the dataset are the honey bee, parasitic wasp, buff tailed bumblebee, carniolan honey bee, bumblee bee, and italian honeybee. These species are all bees and wasps and may be of particular interest over other insect species because neonicotinoids can kill bees and parasitic wasps as they can contaminate pollen and nectar that these insects feed on. As such, it makes sense that these species would be of particular interest in neonicotinoud ecotoxicity studies over other insect species such as beetles and spiders who do not feed on pollen and nectar.
+
 
 8. Concentrations are always a numeric value. What is the class of Conc.1..Author. in the dataset, and why is it not numeric?
 
 ```{r}
-
+class(Neonics$Conc.1..Author.)
 ```
 
-> Answer:
+> Answer: The class of Conc.1..Author in the dataset is "factor". The class of these values is not numeric because using a factor rather than a numeric value allows for "NR" to be input in the list of values when the concentration was not reported.
 
 
 
@@ -85,32 +91,40 @@ Litter <- read.csv("~/Documents/Environmental_Data_Analytics_2020/Data/Raw/NEON_
 
 9. Using `geom_freqpoly`, generate a plot of the number of studies conducted by publication year. 
 ```{r}
-
+ggplot(Neonics) +
+  geom_freqpoly(aes(x = Publication.Year), bins = 50)
 ```
 
 10. Reproduce the same graph but now add a color aesthetic so that different Test.Location are displayed as different colors.
 ```{r}
-
+ggplot(Neonics) +
+  geom_freqpoly(aes(x = Publication.Year, color = Test.Location), bins = 50)
 ```
 
 Interpret this graph. What are the most common test locations, and do they differ over time?
 
-> Answer: 
+> Answer: The most common test locations are "field natural" and "lab". The frequency of testing in the "field natural" location peaks around 2008, with less frequent testing before and after this period. By contrast, testing in "lab" locations increases dramatically with time, peaking around 2012 and 2014, tapering slightly after this, but still remaining quite high until around 2017.
 
 11. Create a bar graph of Endpoint counts. What are the two most common end points, and how are they defined? Consult the ECOTOX_CodeAppendix for more information. 
 
 ```{r}
-
+ggplot(Neonics, aes(x = Endpoint)) +
+  geom_bar()
 ```
 
-> Answer: 
->
+> Answer: The two most common endpoints are LOEL and NOEL. As per the ECOTOX_CodeAppendix, LOEL is defined as the "lowest-observable-effect-level", or the lowest dose producing effects that were significantly different from responses of controls. NOEL is defined as "no-observable-effect-level", or the highest dose producing effects not significantly different from responses of controls according to author's reported statistical test. 
 
 ## Explore your data (Litter)
 
 12. Determine the class of collectDate. Is it a date? If not, change to a date and confirm the new class of the variable. Using the `unique` function, determine which dates litter was sampled in August 2018. 
 ```{r}
-
+class(Litter$collectDate)
+Litter$collectDate <- as.Date(Litter$collectDate, format = "%Y-%m-%d")
+Litter$collectDate <- format(Litter$collectDate, "%Y-%m-%d")
+Litter$collectDate <- as.Date(Litter$collectDate, format = "%Y-%m-%d")
+class(Litter$collectDate)
+x <- c(collectDate)
+unique(x)
 ```
 
 13. Using the `unique` function, determine how many plots were sampled at Niwot Ridge. How is the information obtained from `unique` different from that obtained from `summary`?
