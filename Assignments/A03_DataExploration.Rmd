@@ -25,19 +25,19 @@ The completed exercise is due on Tuesday, January 28 at 1:00 pm.
 ```{r,  message = FALSE}
 getwd()
 library(tidyverse)
-Neonics <- read.csv("./Data/Processed/ECOTOX_Neonicotinoids_Insects_raw.csv")
-Litter <- read.csv("./Data/Processed/NEON_NIWO_Litter_massdata_2018-08_raw.csv")
+Neonics <- read.csv("~/Documents/Environmental_Data_Analytics_2020/Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv")
+Litter <- read.csv("~/Documents/Environmental_Data_Analytics_2020/Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv")
 ```
 
 ## Learn about your system
 
 2. The neonicotinoid dataset was collected from the Environmental Protection Agency's ECOTOX Knowledgebase, a database for ecotoxicology research. Neonicotinoids are a class of insecticides used widely in agriculture. The dataset that has been pulled includes all studies published on insects. Why might we be interested in the ecotoxicologoy of neonicotinoids on insects? Feel free to do a brief internet search if you feel you need more background information. 
 
-> Answer: 
+> Answer: The use of neonicotinoids has been associated with adverse ecological impacts, especially honey bee population collapse and bird population declines due to the reduciton in insect populations. As such, understanding the ecotoxicology of neonicotinoids on insects is crucial in understanding how these biotic populations respond to certain dosages of the insecticide and, consequently, how best to manage these populations.
 
 3. The Niwot Ridge litter and woody debris dataset was collected from the National Ecological Observatory Network, which collectively includes 81 aquatic and terrestrial sites across 20 ecoclimatic domains. 32 of these sites sample forest litter and woody debris, and we will focus on the Niwot Ridge long-term ecological research (LTER) station in Colorado. Why might we be interested in studying litter and woody debris that falls to the ground in forests? Feel free to do a brief internet search if you feel you need more background information. 
 
-> Answer: 
+> Answer: Litter and woody debris can provide many benefits, including nutrient cycling, providing habitat for forest species, and promoting soil stabilization and improved infiltration. However, large quantitites of litter and woody debris on the ground of forests can provide fuel for wildfire events, leading to prolonged, and more severe forest fires. 
 
 4. How is litter and woody debris sampled as part of the NEON network? Read the NEON_Litterfall_UserGuide.pdf document to learn more. List three pieces of salient information about the sampling methods here: 
 
