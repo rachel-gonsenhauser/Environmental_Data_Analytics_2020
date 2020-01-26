@@ -123,32 +123,52 @@ Litter$collectDate <- as.Date(Litter$collectDate, format = "%Y-%m-%d")
 Litter$collectDate <- format(Litter$collectDate, "%Y-%m-%d")
 Litter$collectDate <- as.Date(Litter$collectDate, format = "%Y-%m-%d")
 class(Litter$collectDate)
-x <- c(collectDate)
-unique(x)
+
+collection_date <- Litter$collectDate
+collection_date
+length(collection_date)
+unique_collection_date <- unique(collection_date)
+unique_collection_date
+length(unique_collection_date)
 ```
+
+> Answer: Litter was sampled on August 2, 2018 and August 30, 2018.
 
 13. Using the `unique` function, determine how many plots were sampled at Niwot Ridge. How is the information obtained from `unique` different from that obtained from `summary`?
 
 ```{r}
-
+plots <-Litter$plotID
+length(plots)
+unique_plots <- unique(plots)
+unique_plots
+length(unique_plots)
+summary(unique_plots)
+summary(plots)
 ```
 
-> Answer: 
+> Answer: The 'unique' function reveals that 12 plots were sampled at Niwot Ridge. The 'unique' function presents a list of site numbers, explaining that they exist at 12 levels. Conversely, the 'summary' function provides a list of site numbers accompanied by counts of each plot name.
 
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
 ```{r}
-
+ggplot(Litter, aes(x = functionalGroup)) +
+  geom_bar()
 ```
 
 15. Using `geom_boxplot` and `geom_violin`, create a boxplot and a violin plot of dryMass by functionalGroup. 
 ```{r}
+ggplot(Litter) +
+  geom_boxplot(aes(x = functionalGroup, y = dryMass))
 
+ggplot(Litter) +
+  geom_violin(aes(x = functionalGroup, y = dryMass), 
+              draw_quantiles = c(0.25, 0.5, 0.75),
+                   scale = "count")
 ```
 
 Why is the boxplot a more effective visualization option than the violin plot in this case?
 
-> Answer: 
+> Answer: The boxplot is able to show the distribution of dryMass for each functional group, wherein the median and spread of dryMass in each case can be cmopared side by side. By contrast, the violin plot is only able to show the spread of dryMass values for each group in this case.
 
 What type(s) of litter tend to have the highest biomass at these sites? 
 
-> Answer: 
+> Answer: The mixed and needles functional groups have the highest biomass at these sites. Additionally, the twigs/branches group has an outlier with a particuarly high biomass value.
