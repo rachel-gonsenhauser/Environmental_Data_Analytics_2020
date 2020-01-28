@@ -83,7 +83,7 @@ summary(Neonics$Species.Common.Name)
 class(Neonics$Conc.1..Author.)
 ```
 
-> Answer: The class of Conc.1..Author in the dataset is "factor". The class of these values is not numeric because using a factor rather than a numeric value allows for "NR" to be input in the list of values when the concentration was not reported.
+> Answer: The class of Conc.1..Author in the dataset is "factor". The class of these values is not numeric because the data in this column contains non-numeric information (e.g. slashes and letters). As such, this column cannot be made a numeric class of data.
 
 
 
@@ -162,12 +162,12 @@ ggplot(Litter) +
 ggplot(Litter) +
   geom_violin(aes(x = functionalGroup, y = dryMass), 
               draw_quantiles = c(0.25, 0.5, 0.75),
-                   scale = "count")
+                   scale = "count") 
 ```
 
 Why is the boxplot a more effective visualization option than the violin plot in this case?
 
-> Answer: The boxplot is able to show the distribution of dryMass for each functional group, wherein the median and spread of dryMass in each case can be cmopared side by side. By contrast, the violin plot is only able to show the spread of dryMass values for each group in this case.
+> Answer: The boxplot is able to show the distribution of dryMass for each functional group, wherein the median and spread of dryMass in each case can be compared side by side. By contrast, the violin plot is only able to show the spread of dryMass values for each group in this case; since the data is skewed it's very hard to see the data in the violin plot format.
 
 What type(s) of litter tend to have the highest biomass at these sites? 
 
