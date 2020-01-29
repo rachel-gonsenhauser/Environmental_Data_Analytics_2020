@@ -136,7 +136,7 @@ summary(USGS.flow.data$gage.height.mean)
 ```
 Question: What types of research questions might make it favorable to remove NAs from a dataset, and what types of research questions might make it favorable to retain NAs in the dataset?
 
-> Answer: 
+> Answer: Might want to retain NAs if interested in number of samples taken, but may want to take out NAs if looking at questions of presence/absense
 
 ```{r}
 USGS.flow.data.complete <- na.omit(USGS.flow.data) # If you remove an NA, it omits the entire row from the dataset, will only include the complete cases within the data frame
