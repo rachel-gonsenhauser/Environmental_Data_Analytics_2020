@@ -33,7 +33,7 @@ The completed exercise is due on Tuesday, January 21 at 1:00 pm.
 
 ```{r}
 #1. creating a vector that has this sequence of numbers
-vector1 <- c(1,5,9,13,27,31,35,39,43,47,51,55,59,63,67,71,74,79,83,87,91,95,99)
+vector1 <- seq(1,100,4)
 #2. calculating the mean and median of the vector created
 mean(vector1)
 median(vector1)
@@ -70,7 +70,7 @@ names(dataframe1) <- c("Name","Score","Pass?"); View(dataframe1)
 
 ```{r}
 grade2 <- function(x) {
-  ifelse(x > 50, "PASS","FAIL") }
+  ifelse(x >= 50, "TRUE","FALSE") }
 
 grade2(vector_score)
 ```
