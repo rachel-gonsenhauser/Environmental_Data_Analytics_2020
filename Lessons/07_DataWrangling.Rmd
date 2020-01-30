@@ -45,7 +45,7 @@ dim(NTL.nutrient.data.PeterPaul)
 str(NTL.nutrient.data.PeterPaul)
 summary(NTL.nutrient.data.PeterPaul$lakename) 
 # Notice that other lake names didn't go away, even though they have zero values
-NTL.nutrient.data.PeterPaul <- droplevels(NTL.nutrient.data.PeterPaul)
+NTL.nutrient.data.PeterPaul <- droplevels(NTL.nutrient.data.PeterPaul) 
 summary(NTL.nutrient.data.PeterPaul$lakename)
 summary(NTL.nutrient.data.PeterPaul$comments)
 class(NTL.nutrient.data.PeterPaul$sampledate)
@@ -53,9 +53,10 @@ NTL.nutrient.data.PeterPaul$sampledate <- as.Date(NTL.nutrient.data.PeterPaul$sa
 
 NTL.nutrient.data.PeterPaul <- 
   NTL.nutrient.data.PeterPaul %>% #
-  mutate(month = month(sampledate)) %>% #
+  mutate(month = month(sampledate)) %>% # Add a month column
   select(lakeid:daynum, month, sampledate:comments) %>% # 
   drop_na(depth)
+dim(NTL.nutrient.data.PeterPaul) # Dropped NAs so dimensions are smaller
 
 # Save processed nutrient file
 write.csv(NTL.nutrient.data.PeterPaul, row.names = FALSE, 
@@ -67,6 +68,9 @@ NTL.phys.data.PeterPaul.subset <- select(NTL.phys.data.PeterPaul,
   
 NTL.nutrient.data.PeterPaul.subset <- select(NTL.nutrient.data.PeterPaul, 
                                              lakename, year4, daynum, month, sampledate, depth:po4)
+# Writing above code as more succinct code
+NTL.nutrient.data.PeterPaul.subset <-select(NTL.nutrient.data.PeterPaul, 
+                                            lakename:sampledate, depth:po4)
 
 # write a more succinct line of code to subset the nutrient dataset. 
 
@@ -94,11 +98,14 @@ write.csv(NTL.nutrient.data.PeterPaul.gathered, row.names = FALSE,
           file = "./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv")
 
 # Spread nutrient data into separate columns
-NTL.nutrient.data.PeterPaul.spread <- spread(NTL.nutrient.data.PeterPaul.gathered, nutrient, concentration)
+NTL.nutrient.data.PeterPaul.spread <- spread(NTL.nutrient.data.PeterPaul.gathered, 
+                                             nutrient, concentration)
 
 # Split components of cells into multiple columns
 # Opposite of 'separate' is 'unite'
-NTL.nutrient.data.PeterPaul.dates <- separate(NTL.nutrient.data.PeterPaul.subset, sampledate, c("Y", "m", "d"))
+NTL.nutrient.data.PeterPaul.dates <- separate(NTL.nutrient.data.PeterPaul.subset, 
+                                              sampledate, c("Y", "m", "d"))
+View(NTL.nutrient.data.PeterPaul.dates)
 
 # I recommend using lubridate rather than separate and unite.
 
