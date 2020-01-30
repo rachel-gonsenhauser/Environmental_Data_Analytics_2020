@@ -198,7 +198,9 @@ NTL.phys.data.processed <-
   filter(lakename == "Paul Lake" | lakename == "Peter Lake") %>%
   select(lakename, sampledate:temperature_C) %>%
   mutate(temperature_F = (temperature_C*9/5) + 32)
-  
+# Need to have dplyr loaded to work with pipes
+# When using pipe, can just put your dataset name first followed by %>% (then), and then don't need to lead every function with the dataset name  
+# Pipe operator just saves time, faster than making separate functions, very universally used
 ```
 
 Notice that we did not place the dataset name inside the wrangling function but rather at the beginning.
