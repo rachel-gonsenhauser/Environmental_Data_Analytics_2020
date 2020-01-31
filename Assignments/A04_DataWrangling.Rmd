@@ -76,8 +76,18 @@ EPA.air.PM25.2018.subset <- select(EPA.air.PM25.2018, Date, DAILY_AQI_VALUE, Sit
 EPA.air.PM25.2019.subset <- select(EPA.air.PM25.2019, Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY:SITE_LONGITUDE)
 
 #5
+EPA.air.PM25.2018.subset$AQS_PARAMETER_DESC <-"PM2.5"
+EPA.air.PM25.2019.subset$AQS_PARAMETER_DESC <- "PM2.5"
 
 #6
+write.csv(EPA.air.O3.2018.subset, row.names = FALSE, 
+          file = "./Data/Processed/EPAair_O3_NC2018_processed.csv")
+write.csv(EPA.air.O3.2019.subset, row.names = FALSE,
+          file = "./Data/Processed/EPAair_O3_NC2019_processed.csv")
+write.csv(EPA.air.PM25.2018.subset, row.names = FALSE,
+          file = "./Data/Processed/EPAair_PM25_NC2018_processed.csv")
+write.csv(EPA.air.PM25.2019.subset, row.names = FALSE,
+          file = "./Data/Processed/EPAair_PM25_NC2019_processed.csv")
 
 ```
 
@@ -97,9 +107,23 @@ EPA.air.PM25.2019.subset <- select(EPA.air.PM25.2019, Date, DAILY_AQI_VALUE, Sit
 
 ```{r}
 #7
+Ozone.2018 <- read.csv("./Data/Processed/EPAair_O3_NC2018_processed.csv")
+Ozone.2019 <- read.csv("./Data/Processed/EPAair_O3_NC2019_processed.csv")
+PM25.2018 <- read.csv("./Data/Processed/EPAair_PM25_NC2018_processed.csv")
+PM25.2019 <-  read.csv("./Data/Processed/EPAair_PM25_NC2019_processed.csv")
+
+EPA.AirPollutants <- rbind(Ozone.2018, Ozone.2019, PM25.2018, PM25.2019)
 
 #8
+EPA.AirPollutants <- EPA.AirPollutants %>%
+  intersect(EPA.AirPollutants$Site.Name) %>%
+  group_by(Date, Site.Name, AQS_PARAMETER_DESC, COUNTY, add = FALSE) %>%
+  mean(DAILY_AQI_VALUE, SITE_LATITUDE, SITE_LONGITUDE) %>%
+    mutate(Month = month(Date)) %>%
+  mutate(Year = year(Date))
 
+dim(EPA.AirPollutants)
+  
 #9
 
 #10
