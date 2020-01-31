@@ -1,6 +1,6 @@
 ---
 title: "Assignment 4: Data Wrangling"
-author: "Student Name"
+author: "Rachel Gonsenhauser"
 output: pdf_document
 geometry: margin=2.54cm
 ---
@@ -25,8 +25,30 @@ The completed exercise is due on Tuesday, February 4 at 1:00 pm.
 
 ```{r, message = FALSE}
 #1
+getwd()
+library(tidyverse)
+library(lubridate)
+EPA.air.O3.2018 <- read.csv("./Data/Raw/EPAair_O3_NC2018_raw.csv")
+EPA.air.O3.2019 <- read.csv("./Data/Raw/EPAair_O3_NC2019_raw.csv")
+EPA.air.PM25.2018 <- read.csv("./Data/Raw/EPAair_PM25_NC2018_raw.csv")
+EPA.air.PM25.2019 <- read.csv("./Data/Raw/EPAair_PM25_NC2019_raw.csv")
 
 #2
+dim(EPA.air.O3.2018)
+dim(EPA.air.O3.2019)
+dim(EPA.air.PM25.2018)
+dim(EPA.air.PM25.2019)
+
+colnames(EPA.air.O3.2018)
+colnames(EPA.air.O3.2019)
+colnames(EPA.air.PM25.2018)
+colnames(EPA.air.PM25.2019)
+
+str(EPA.air.O3.2018)
+str(EPA.air.O3.2019)
+str(EPA.air.PM25.2018)
+str(EPA.air.PM25.2019)
+
 ```
 
 ## Wrangle individual datasets to create processed files.
@@ -37,8 +59,21 @@ The completed exercise is due on Tuesday, February 4 at 1:00 pm.
 
 ```{r}
 #3
+class(EPA.air.O3.2018$Date)
+class(EPA.air.O3.2019$Date)
+class(EPA.air.PM25.2018$Date)
+class(EPA.air.PM25.2019$Date)
+
+EPA.air.O3.2018$Date <- as.Date(EPA.air.O3.2018$Date, format = "%m/%d/%Y")
+EPA.air.O3.2019$Date <- as.Date(EPA.air.O3.2019$Date, format = "%m/%d/%Y")
+EPA.air.PM25.2018$Date <- as.Date(EPA.air.PM25.2018$Date, format = "%m/%d/%Y")
+EPA.air.PM25.2019$Date <- as.Date(EPA.air.PM25.2019$Date, format = "%m/%d/%Y")
 
 #4
+EPA.air.O3.2018.subset <- select(EPA.air.O3.2018, Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY:SITE_LONGITUDE)
+EPA.air.O3.2019.subset <- select(EPA.air.O3.2019, Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY:SITE_LONGITUDE)
+EPA.air.PM25.2018.subset <- select(EPA.air.PM25.2018, Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY:SITE_LONGITUDE)
+EPA.air.PM25.2019.subset <- select(EPA.air.PM25.2019, Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY:SITE_LONGITUDE)
 
 #5
 
