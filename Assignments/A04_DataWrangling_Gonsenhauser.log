@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.1.8)  3 FEB 2020 14:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.1.8)  3 FEB 2020 14:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -978,11 +978,11 @@ changed.
 (rerunfilecheck)             Checksum: F52E3C2A98F1EC0C7689ED0781E7EDC9;950.
  ) 
 Here is how much of TeX's memory you used:
- 13187 strings out of 493610
- 193110 string characters out of 6159294
+ 13189 strings out of 493610
+ 193132 string characters out of 6159294
  312527 words of memory out of 5000000
  17094 multiletter control sequences out of 15000+600000
- 34717 words of font info for 58 fonts, out of 8000000 for 9000
+ 34800 words of font info for 59 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  39i,6n,42p,838b,447s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2019basic/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/
@@ -995,7 +995,7 @@ ist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2019basic/texmf-dist/fo
 nts/type1/public/lm/lmtk10.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/t
 ype1/public/lm/lmtt10.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/
 public/lm/lmtti10.pfb>
-Output written on A04_DataWrangling_Gonsenhauser.pdf (7 pages, 215485 bytes).
+Output written on A04_DataWrangling_Gonsenhauser.pdf (7 pages, 215493 bytes).
 PDF statistics:
  137 PDF objects out of 1000 (max. 8388607)
  118 compressed objects within 2 object streams

@@ -171,4 +171,4 @@ dim(EPA.AirPollutants.summary)
 
 14. Why did we use the function `drop_na` rather than `na.omit`?
 
-> Answer: We used drop_na because this allows us to only drop observations where there are NAs in specific columns (in this case, month or year). Conservely, na.omit would omit all observations from the data set that have an NA in any column, which can get rid of a hug chunk of the dataset.
+> Answer: We used drop_na because this allows us to only drop observations where there are NAs in specific columns (in this case, month or year). Conversely, na.omit would omit all observations from the data set that have an NA in any column, which can get rid of a hug chunk of the dataset.
