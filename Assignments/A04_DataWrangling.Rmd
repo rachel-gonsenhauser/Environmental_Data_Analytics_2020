@@ -26,6 +26,7 @@ The completed exercise is due on Tuesday, February 4 at 1:00 pm.
 ```{r, message = FALSE}
 #1
 getwd()
+library(plyr)
 library(tidyverse)
 library(lubridate)
 EPA.air.O3.2018 <- read.csv("./Data/Raw/EPAair_O3_NC2018_raw.csv")
@@ -115,20 +116,23 @@ PM25.2019 <-  read.csv("./Data/Processed/EPAair_PM25_NC2019_processed.csv")
 EPA.AirPollutants <- rbind(Ozone.2018, Ozone.2019, PM25.2018, PM25.2019)
 
 #8
-EPA.AirPollutants <- EPA.AirPollutants %>%
+EPA.AirPollutants <- EPA.AirPollutants.wrangled %>%
   intersect(EPA.AirPollutants$Site.Name) %>%
-  group_by(Date, Site.Name, AQS_PARAMETER_DESC, COUNTY, add = FALSE) %>%
+  group_by(Date, Site.Name, AQS_PARAMETER_DESC, COUNTY) %>%
   mean(DAILY_AQI_VALUE, SITE_LATITUDE, SITE_LONGITUDE) %>%
     mutate(Month = month(Date)) %>%
   mutate(Year = year(Date))
+# Go over with Njeri how to write this pipe in office hours 
 
-dim(EPA.AirPollutants)
-  
 #9
+EPA.AirPollutants.spread <- spread(EPA.AirPollutants.wrangled, DAILY_AQI_VALUE)
 
 #10
+dim(EPA.AirPollutants.spread)
 
 #11
+write.csv(EPA.AirPollutants.spread, row.names = FALSE, 
+          file ="./Data/Processed/EPAair_O3_PM25_NC1718_Processed.csv")
 
 ```
 
@@ -144,6 +148,7 @@ dim(EPA.AirPollutants)
 #12b
 
 #13
+dim()
 
 ```
 
