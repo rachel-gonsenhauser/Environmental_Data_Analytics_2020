@@ -135,6 +135,7 @@ summarize(meanAQI = mean(DAILY_AQI_VALUE),
                          meanLongitude = mean(SITE_LONGITUDE)) %>%
     mutate(Month = month(Date)) %>%
   mutate(Year = year(Date))
+dim(EPA.AirPollutants.wrangled)
 
 #9
 EPA.AirPollutants.spread <- spread(EPA.AirPollutants.wrangled, 
