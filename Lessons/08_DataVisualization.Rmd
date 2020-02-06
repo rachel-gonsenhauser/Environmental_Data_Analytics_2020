@@ -178,6 +178,12 @@ print(NvsP)
 # Exercise: Plot relationships between air quality measurements
 
 # 1. 
+AirQual <-
+  ggplot(EPAair, aes(x = Ozone, y = PM2.5, color = SITE_LATITUDE, apha = 0.5)) +
+  geom_point() +
+  geom_smooth(method = lm, se = FALSE) 
+print(AirQual)
+
 # Plot AQI values for ozone by PM2.5, colored by latitude 
 # Make the points 50 % transparent
 # Add a line of best fit for the linear regression of these variables.
