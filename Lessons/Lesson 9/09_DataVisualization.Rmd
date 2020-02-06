@@ -22,7 +22,7 @@ PeterPaul.chem.nutrients <-
   read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv")
 PeterPaul.chem.nutrients.gathered <-
   read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv")
-EPAair <- read.csv("./Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
+EPAair <- read.csv("./Data/Processed/EPAair_O3_PM25_NC1819_Processed_KS.csv")
 
 EPAair$Date <- as.Date(EPAair$Date, format = "%Y-%m-%d")
 PeterPaul.chem.nutrients$sampledate <- as.Date(
@@ -81,6 +81,8 @@ O3plot5 <- ggplot(EPAair) +
   mytheme
 print(O3plot5)  
 
+# This is setting mytheme as your default plot and will apply it to all plots so you don't need to keep calling up the theme throughout the session
+#Helpful to change text size in the custom theme you make
 theme_set(mytheme)
 
 O3plot6 <- ggplot(EPAair) +
@@ -94,17 +96,18 @@ print(O3plot6)
 While the theme allows us to set multiple aspects of plots, ggplot allows us to adjust other parts of plots outside of the theme. 
 
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
+# ggplot adds things in layers so whatever you want to show up on top, add it last
 O3plot7 <- ggplot(EPAair, aes(x = Date, y = Ozone)) +
-  geom_hline(yintercept = 50, lty = 2) +
+  geom_hline(yintercept = 50, lty = 2) + # different lty values change line type
   geom_hline(yintercept = 100, lty = 2) +
-  geom_point(alpha = 0.5, size = 1.5) +
+  geom_point(alpha = 0.5, size = 1.5) + # alpha = 0.5 means the points are 50% transparent
   geom_text(x = as.Date("2020-01-01"), y = 45, label = "good", hjust = 1, fontface = "bold") +
   geom_text(x = as.Date("2020-01-01"), y = 95, label = "moderate", hjust = 1, fontface = "bold") +
-  geom_text(x = as.Date("2020-01-01"), y = 120, label = "unhealthy (sensitive groups)", hjust = 1, fontface = "bold") +
+  geom_text(x = as.Date("2020-01-01"), y = 120, label = "unhealthy (sensitive groups)", hjust = 1, fontface = "bold") + # hjust justifies on either the right of left
   scale_x_date(limits = as.Date(c("2018-01-01", "2019-12-31")), 
-    date_breaks = "2 months", date_labels = "%b %y") +
+    date_breaks = "2 months", date_labels = "%b %y") + #b is 3-letter month
   ylab(expression("O"[3]* " AQI Value")) +
-  theme(axis.text.x = element_text(angle = 45,  hjust = 1))
+  theme(axis.text.x = element_text(angle = 45,  hjust = 1)) 
 print(O3plot7)  
 
 ```
@@ -152,9 +155,9 @@ nationalparkcolors (package)
 * https://github.com/katiejolly/nationalparkcolors
 
 ```{r, warning = FALSE}
-# install.packages("viridis")
-# install.packages("RColorBrewer")
-# install.packages("colormap")
+install.packages("viridis")
+install.packages("RColorBrewer")
+install.packages("colormap")
 library(viridis)
 library(RColorBrewer)
 library(colormap)
@@ -172,13 +175,16 @@ print(NvsP)
 # let's first make the plot look better.
 # change your axis labels to reflect TN and TP in micrograms per liter.
 # change your legend labels
+# Redo this later, this is all wrong
 NvsP2 <-
   ggplot(PeterPaul.chem.nutrients, aes(x = tp_ug, y = tn_ug, color = depth, shape = lakename)) +
   geom_point(alpha = 0.7, size = 2.5) +
-  #labs() + # change your legend labels here
+  labs(x = expression(paste("TP (", mu, "g/L)")),
+         y = expression(paste("TN (", mu, "g/L)")),
+                color = "Depth (m)", shape = "") + # change your legend labels here
   scale_shape_manual(values = c(15, 17)) +
-  #scale_color_distiller(palette = "Blues", direction = 1) + # use scale_color_brewer for discrete variables
-  scale_color_viridis(option = "magma", direction = -1) +
+  scale_color_distiller(palette = "Blues", direction = 1) + # use scale_color_brewer for discrete variables
+  scale_color_viridis(option = "magma", direction = -1, end = 0.8) +
   theme(legend.position = "right", 
         legend.text = element_text(size = 12), legend.title = element_text(size = 12))
 print(NvsP2)
@@ -190,10 +196,13 @@ print(NvsP2)
 Nutrientplot <-
   ggplot(PeterPaul.chem.nutrients.gathered, aes(x = lakename, y = concentration, color = nutrient)) +
   geom_boxplot() +
+    labs(x = expression(paste("")),
+         y = expression(paste("TN (", mu, "g/L)")),
+                color = "Nutrients", shape = "Nutrients") +
 # place your additional edits here
-  scale_y_continuous(expand = c(0, 0)) +
+  #scale_y_continuous(expand = c(0, 0)) +
   #scale_color_brewer(palette = "YlGnBu") +
-  #scale_color_manual(values = c("#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#0c2c84")) +
+  scale_color_manual(values = c("#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#0c2c84")) +
   #scale_color_viridis(discrete = TRUE, end = 0.8) +
   theme(legend.position = "right")
 print(Nutrientplot)
