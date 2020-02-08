@@ -40,15 +40,32 @@ Litter <-
   read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv")
 
 #2
+class(PeterPaul.chem.nutrients$sampledate)
+class(PeterPaul.chem.nutrients.gathered$sampledate)
+class(Litter$collectDate)
 
+PeterPaul.chem.nutrients$sampledate <- 
+  as.Date(PeterPaul.chem.nutrients$sampledate, 
+          format = "%Y-%m-%d")
+PeterPaul.chem.nutrients.gathered$sampledate <-
+  as.Date(PeterPaul.chem.nutrients.gathered$sampledate, 
+          format = "%Y-%m-%d")
+Litter$collectDate <- 
+  as.Date(Litter$collectDate, format = "%Y-%m-%d")
 
+class(PeterPaul.chem.nutrients$sampledate)
+class(PeterPaul.chem.nutrients.gathered$sampledate)
+class(Litter$collectDate)
 ```
 ## Define your theme
 3. Build a theme and set it as your default theme.
 
 ```{r}
+mytheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "bottom")
 
-
+theme_set(mytheme)
 ```
 
 ## Create graphs
@@ -57,31 +74,75 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 4. [NTL-LTER] Plot total phosphorus by phosphate, with separate aesthetics for Peter and Paul lakes. Add a line of best fit and color it black. Adjust your axes to hide extreme values.
 
 ```{r}
+library(viridis)
+library(RColorBrewer)
+library(colormap)
 
-
-
+Pplot1 <- ggplot(PeterPaul.chem.nutrients) +
+  geom_point(aes(x = po4, y = tp_ug, color = lakename)) +
+    geom_smooth(aes(x =po4, y = tp_ug), color = "black",
+                method = lm, se = FALSE) +
+   labs(x = expression(PO4 ~ (mu*g / L)), y = expression(TP ~ (mu*g / L)),
+       color = "") +
+  scale_color_brewer(palette = "Set1") +
+  xlim(0, 50) +
+  ylim(0, 200)
+print(Pplot1)
 ```
 
 
 5. [NTL-LTER] Make three separate boxplots of (a) temperature, (b) TP, and (c) TN, with month as the x axis and lake as a color aesthetic. Then, create a cowplot that combines the three graphs. Make sure that only one legend is present and that graph axes are aligned.
 
 ```{r}
+TempPlot <- ggplot(PeterPaul.chem.nutrients) +
+  geom_boxplot(aes(x = month, y = temperature_C, color = lakename)) +
+   labs(x = expression(month), y = expression(temperature ~ (C)),
+       color = "") +
+  scale_color_brewer(palette = "Set1") 
+print(TempPlot)
 
+TPPlot <- ggplot(PeterPaul.chem.nutrients) +
+  geom_boxplot(aes(x = month, y = tp_ug, color = lakename)) +
+   labs(x = expression(month), y = expression(TP ~ (mu*g / L)),
+       color = "") +
+  scale_color_brewer(palette = "Set1") 
+print(TPPlot)
 
+TNPlot <- ggplot(PeterPaul.chem.nutrients) +
+  geom_boxplot(aes(x = month, y = tn_ug, color = lakename)) +
+   labs(x = expression(month), y = expression(TN ~ (mu*g / L)),
+       color = "") +
+  scale_color_brewer(palette = "Set1") 
+print(TNPlot)
+
+library(cowplot)
+plot_grid((TempPlot + theme(legend.position = "none")), (TPPlot + theme(legend.position = "none")), (TNPlot + theme(legend.position = "right")), nrow = 1, align = 'h')
+print
+# Ask Njeri during office hours if this is right, how to make the graphs all the same size
 ```
 
 Question: What do you observe about the variables of interest over seasons and between lakes? 
 
-> Answer: 
+> Answer: ***come back to this, how do you look across seasons with a boxplot?
 
 6. [Niwot Ridge] Plot a subset of the litter dataset by displaying only the "Needles" functional group. Plot the dry mass of needle litter by date and separate by NLCD class with a color aesthetic. (no need to adjust the name of each land use)
+
+```{r}
+Needles <-  filter(Litter, functionalGroup %in%
+           c("Needles"))
+
+NeedlesPlot <- ggplot(Needles) +
+  geom_point(aes(x = collectDate, y = dryMass, color =nlcdClass)) 
+print(NeedlesPlot)
+```
 
 7. [Niwot Ridge] Now, plot the same plot but with NLCD classes separated into three facets rather than separated by color. 
 
 ```{r}
-
-
-
+NeedlesPlot2 <- ggplot(Needles) +
+  geom_point(aes(x = collectDate, y = dryMass)) +
+  facet_wrap(vars(nlcdClass), nrow = 3)
+print(NeedlesPlot2)
 ```
 
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
