@@ -137,6 +137,9 @@ NeedlesPlot <- ggplot(Needles) +
        color = "") +
   scale_color_brewer(palette = "Set1")
 print(NeedlesPlot)
+
+#Ask Njeri why sometimes I have to put axis titles in quotes to show up and other times I don't
+# Ask how to change names of NLCD classes in legend
 ```
 
 7. [Niwot Ridge] Now, plot the same plot but with NLCD classes separated into three facets rather than separated by color. 
