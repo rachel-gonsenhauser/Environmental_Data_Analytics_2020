@@ -98,7 +98,6 @@ TempPlot <- ggplot(PeterPaul.chem.nutrients) +
   geom_boxplot(aes(x = as.factor(month), y = temperature_C, color = lakename)) +
    labs(x = expression(month), y = expression(temperature ~ (C)),
        color = "") +
-    theme(axis.title.x = element_blank(), axis.text.x = element_blank()) +
   scale_color_brewer(palette = "Set1") 
 print(TempPlot)
 
@@ -106,8 +105,7 @@ TPPlot <- ggplot(PeterPaul.chem.nutrients) +
   geom_boxplot(aes(x = as.factor(month), y = tp_ug, color = lakename)) +
    labs(x = expression(month), y = expression(TP ~ (mu*g / L)),
        color = "") +
-  scale_color_brewer(palette = "Set1") +
-  theme(axis.title.x = element_blank(), axis.text.x = element_blank())
+  scale_color_brewer(palette = "Set1") 
 print(TPPlot)
 
 TNPlot <- ggplot(PeterPaul.chem.nutrients) +
@@ -118,7 +116,7 @@ TNPlot <- ggplot(PeterPaul.chem.nutrients) +
 print(TNPlot)
 
 library(cowplot)
-plot_grid((TempPlot + theme(legend.position = "none")), (TPPlot + theme(legend.position = "none")), (TNPlot + theme(legend.position = "bottom")), nrow = 3, rel_heights = c(1, 1, 1.5), align = 'hv')
+plot_grid((TempPlot + theme(legend.position = "none")), (TPPlot + theme(legend.position = "none")), (TNPlot + theme(legend.position = "bottom")), nrow = 3, rel_heights = c(1, 1, 1.25), align = 'hv')
 print
 ```
 
