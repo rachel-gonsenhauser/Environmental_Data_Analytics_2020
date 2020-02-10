@@ -116,7 +116,7 @@ TNPlot <- ggplot(PeterPaul.chem.nutrients) +
 print(TNPlot)
 
 library(cowplot)
-plot_grid((TempPlot + theme(legend.position = "none")), (TPPlot + theme(legend.position = "none")), (TNPlot + theme(legend.position = "bottom")), nrow = 1, align = 'h')
+plot_grid((TempPlot + theme(legend.position = "none")), (TPPlot + theme(legend.position = "none")), (TNPlot + theme(legend.position = "bottom")), nrow = 3, align = 'v')
 print
 # Ask Njeri during office hours if this is right, how to make the graphs all the same size
 ```
@@ -132,7 +132,10 @@ Needles <-  filter(Litter, functionalGroup %in%
            c("Needles"))
 
 NeedlesPlot <- ggplot(Needles) +
-  geom_point(aes(x = collectDate, y = dryMass, color =nlcdClass)) 
+  geom_point(aes(x = collectDate, y = dryMass, color =nlcdClass)) +
+  labs(x = expression(collection date), y = expression(dry mass),
+       color = "") +
+  scale_color_brewer(palette = "Set1")
 print(NeedlesPlot)
 ```
 
@@ -141,7 +144,10 @@ print(NeedlesPlot)
 ```{r}
 NeedlesPlot2 <- ggplot(Needles) +
   geom_point(aes(x = collectDate, y = dryMass)) +
-  facet_wrap(vars(nlcdClass), nrow = 3)
+  facet_wrap(vars(nlcdClass), nrow = 3) +
+   labs(x = expression("collection date"), y = expression("dry mass"),
+       color = "") +
+  scale_color_brewer(palette = "Set1")
 print(NeedlesPlot2)
 ```
 
