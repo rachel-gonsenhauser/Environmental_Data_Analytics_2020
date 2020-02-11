@@ -156,9 +156,8 @@ print(Boxplot)
 
 #3
 ViolinPlot <- ggplot(EPAair) +
-  geom_violin(aes(x = as.factor(Year), y = Ozone))
+  geom_violin(aes(x = as.factor(Year), y = Ozone, draw.quantiles = 0.5))
 print(ViolinPlot)
-# Come back to this!!
 
 ```
 
