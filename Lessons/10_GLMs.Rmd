@@ -163,7 +163,7 @@ print(ViolinPlot)
 
 Now, write a summary of your findings, incorporating statistical output, reference to the figure(s), and a contextual interpretation.
 
-> 
+> EPA ozone measurements for 2019 are significantly higher than measurements in 2018 (two-sample t-test: t=-2.266, df=6467, p=0.007736). The DensityPlot exhibits this increase in ozone concentrations from 2018 to 2019.    
 
 
 
