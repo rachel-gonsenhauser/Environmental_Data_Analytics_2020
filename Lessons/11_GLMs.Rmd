@@ -40,7 +40,7 @@ Litter.Totals <- Litter %>%
   group_by(plotID, collectDate, nlcdClass) %>%
   summarise(dryMass = sum(dryMass))
 
-# Test for normality. 
+# Test for normality (of raw data, not model fit residuals)
 # Note: the important assumption for GLMs is normality of residuals, 
 # not necessarily normality of raw data. See below when we plot the model.
 shapiro.test(Litter.Totals$dryMass[Litter.Totals$plotID == "NIWO_040"])
@@ -65,19 +65,21 @@ bartlett.test(Litter.Totals$dryMass ~ Litter.Totals$plotID)
 # Format ANOVA as aov
 Litter.Totals.anova <- aov(data = Litter.Totals, dryMass ~ plotID)
 summary(Litter.Totals.anova)
+# Plot ID is a significant predictor of dry mass, means are different across plots
 
 # Format ANOVA as lm
 Litter.Totals.anova2 <- lm(data = Litter.Totals, dryMass ~ plotID)
 summary(Litter.Totals.anova2)
+# Output is noting whether that specific plot ID is significantly different from intercept
 
 # Checking model fit and assumptions
 # ANOVA is robust against departures from normality.
 plot(Litter.Totals.anova2)
 
-# Post-hoc test
+# Post-hoc test, only works if you run it on your aov object, not lm, gives all pairwise relationships between plots
 TukeyHSD(Litter.Totals.anova)
 
-# Extract groupings for pairwise relationships
+# Extract groupings for pairwise relationships, tell it which variable is our predictor variable (plotID) and tell it to give you groupinngs (grouup = TRUE), if letters match between groups, they are not statistically significant (any two with an a are not significantly different)
 Litter.Totals.groups <- HSD.test(Litter.Totals.anova, "plotID", group = TRUE)
 Litter.Totals.groups
 
@@ -85,17 +87,19 @@ Litter.Totals.groups
 Litter.Totals.plot <- ggplot(Litter.Totals, aes(x = plotID, y = dryMass)) +
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  stat_summary(geom = "text", fun.y = max, vjust = -1, size = 3.5,
+# For stat summary, tell it which type of geometry to plot, where to place the text (max y value here), vertically adjust by -1 so it doesn't plot on top of value, adjust size of letters, and assign labels and put in exact order they appear in dataset, will be different order that it appears in the HSD test)
+  stat_summary(geom = "text", fun.y = max, vjust = -1, size = 4,
                label = c("abc", "ab", "abcd", "bcd", "bcd", "a", 
                          "d", "abcd", "cd", "d", "abcd", "abcd")) +
   labs(x = "Plot ID", y = "Dry Mass (g)") +
+# May need to reset y limits of graph when you use stat summary
   ylim(0, 85)
 print(Litter.Totals.plot)
 ```
 
 What information does the output give us? How might we report this information in a report?
 
-> 
+> Total litter biomass differe significantly among sites at the Niwot Ridge LTER (Figure 1; ANOVA,F11,198= 4.813, p<0.0001).
 
 
 ### Non-parametric equivalent of ANOVA: Kruskal-Wallis Test
@@ -164,8 +168,13 @@ Litter.groups
 # Edit this graph to make it more visually appealing.
 # Add letters to represent statistical groupings.
 Litter.anova.plot <- ggplot(Litter, aes(y = dryMass, x = nlcdClass, color = functionalGroup)) +
-  geom_boxplot()
+  geom_boxplot() +
+   stat_summary(geom = "text", fun.y = max, vjust = -1, size = 3.5, position = position_dodge(0.75),
+               label = c("d", "d", "d", "a", "d", "d", "d", "d", "d", "d", "d", "b", "d", "d", "d", "d", "d", "d", "cd", "bc", "d", "d", "d", "d")) +
+  labs(x = "NLCD Class", y = "Dry Mass (g)") +
+  
 print(Litter.anova.plot)
 
 ```
 
+> Sentence about output:
