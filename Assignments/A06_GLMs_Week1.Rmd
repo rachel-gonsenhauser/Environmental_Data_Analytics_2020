@@ -1,6 +1,6 @@
 ---
 title: "Assignment 6: GLMs week 1 (t-test and ANOVA)"
-author: "Student Name"
+author: "Rachel Gonsenhauser"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -29,9 +29,20 @@ The completed exercise is due on Tuesday, February 18 at 1:00 pm.
 
 ```{r, message = FALSE}
 #1
-
+getwd()
+library(tidyverse)
+library(cowplot)
+install.packages("agricolae")
+library(agricolae)
+PeterPaul.Processed <-
+  read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaul_Processed.csv")
 
 #2
+class(PeterPaul.Processed$sampledate)
+PeterPaul.Processed$sampledate <- as.Date(
+  PeterPaul.Processed$sampledate, format = "%Y-%m-%d")
+class(PeterPaul.Processed$sampledate)
+head(PeterPaul.Processed)
 
 ```
 
@@ -40,7 +51,10 @@ The completed exercise is due on Tuesday, February 18 at 1:00 pm.
 
 3. Wrangle your dataset so that it contains only surface depths and only the years 1993-1996, inclusive. Set month as a factor.
 ```{r}
-
+PeterPaul.Wrangled <- filter(PeterPaul.Processed, depth == 0) 
+PeterPaul.Wrangled <- filter(PeterPaul.Wrangled, year4 %in% c(1993:1996))
+  PeterPaul.Wrangled$month <- as.factor(PeterPaul.Wrangled$month)
+class(PeterPaul.Wrangled$month)
 
 ```
 
