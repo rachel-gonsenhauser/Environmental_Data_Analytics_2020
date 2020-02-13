@@ -22,7 +22,7 @@ PeterPaul.chem.nutrients <-
   read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv")
 PeterPaul.chem.nutrients.gathered <-
   read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv")
-EPAair <- read.csv("./Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
+EPAair <- read.csv("./Data/Processed/EPAair_O3_PM25_NC1819_Processed_KS.csv")
 
 EPAair$Date <- as.Date(EPAair$Date, format = "%Y-%m-%d")
 PeterPaul.chem.nutrients$sampledate <- as.Date(
@@ -95,8 +95,8 @@ While the theme allows us to set multiple aspects of plots, ggplot allows us to 
 
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
 O3plot7 <- ggplot(EPAair, aes(x = Date, y = Ozone)) +
-  geom_hline(yintercept = 50, lty = 2) +
-  geom_hline(yintercept = 100, lty = 2) +
+  geom_hline(yintercept = 50, lty = 1) +
+  geom_hline(yintercept = 100, lty = 1) +
   geom_point(alpha = 0.5, size = 1.5) +
   geom_text(x = as.Date("2020-01-01"), y = 45, label = "good", hjust = 1, fontface = "bold") +
   geom_text(x = as.Date("2020-01-01"), y = 95, label = "moderate", hjust = 1, fontface = "bold") +
@@ -152,9 +152,9 @@ nationalparkcolors (package)
 * https://github.com/katiejolly/nationalparkcolors
 
 ```{r, warning = FALSE}
-# install.packages("viridis")
-# install.packages("RColorBrewer")
-# install.packages("colormap")
+#install.packages("viridis")
+#install.packages("RColorBrewer")
+#install.packages("colormap")
 library(viridis)
 library(RColorBrewer)
 library(colormap)
@@ -174,7 +174,7 @@ print(NvsP)
 # change your legend labels
 NvsP2 <-
   ggplot(PeterPaul.chem.nutrients, aes(x = tp_ug, y = tn_ug, color = depth, shape = lakename)) +
-  geom_point(alpha = 0.7, size = 2.5) +
+  geom_point(alpha = 0.8, size = 2.5) +
   # note: the labs function allows you to relabel anything specified as an aesthetic in the first line
   labs(x = expression(TP ~ (mu*g / L)), y = expression(TN ~ (mu*g / L)),
        color = "Depth (m)", shape = "") + 
