@@ -55,7 +55,6 @@ PeterPaul.Wrangled <- filter(PeterPaul.Processed, depth == 0)
 PeterPaul.Wrangled <- filter(PeterPaul.Wrangled, year4 %in% c(1993:1996))
   PeterPaul.Wrangled$month <- as.factor(PeterPaul.Wrangled$month)
 class(PeterPaul.Wrangled$month)
-
 ```
 
 ## Analysis
@@ -64,7 +63,7 @@ Peter Lake was manipulated with additions of nitrogen and phosphorus over the ye
 
 4. Which application of the GLM will you use (t-test, one-way ANOVA, two-way ANOVA with main effects, or two-way ANOVA with interaction effects)? Justify your choice.
 
-> Answer: 
+> Answer: I chose to use a two-way ANOVA because in this case the explanatory variable (total nitrogen or total phosphorous) is continuous and the two explanatory variables (lake and month) are categorical. Though I didn't expect there to be an interaction between lake and season, I ran both a two-way ANOVA with main effects and a two-way ANOVA with interaction effects so I could see if there was an interaction between the explanatory variables and compare the results of both tests.
 
 5. Run your test for TN. Include examination of groupings and consider interaction effects, if relevant.
 
@@ -72,7 +71,17 @@ Peter Lake was manipulated with additions of nitrogen and phosphorus over the ye
 
 ```{r}
 #5
+PeterPaul.TN.anova.2way <- aov(data = PeterPaul.Wrangled, tn_ug ~ lakename + month)
+summary(PeterPaul.TN.anova.2way)
+PeterPaul.TN.anova.2way2 <- lm(data = PeterPaul.Wrangled, tn_ug ~ lakename + month)
+summary(PeterPaul.TN.anova.2way2)
 
+TukeyHSD(PeterPaul.TN.anova.2way)
+
+PeterPaul.TN.anova.2way3 <- aov(data = PeterPaul.Wrangled, tn_ug ~ lakename * month)
+summary(PeterPaul.TN.anova.2way3)
+PeterPaul.TN.anova.2way4 <- lm(data = PeterPaul.Wrangled, tn_ug ~ lakename * month)
+summary(PeterPaul.TN.anova.2way4)
 
 #6
 
