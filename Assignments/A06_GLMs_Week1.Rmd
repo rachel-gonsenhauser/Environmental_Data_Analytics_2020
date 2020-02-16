@@ -71,7 +71,7 @@ Peter Lake was manipulated with additions of nitrogen and phosphorus over the ye
 
 ```{r}
 #5 
-# How to code bartlett test here?
+# How to code bartlett test here, ask Njeri in office hours
 
 PeterPaul.TN.anova.2way <- aov(data = PeterPaul.Wrangled, tn_ug ~ lakename * month)
 summary(PeterPaul.TN.anova.2way)
@@ -79,14 +79,18 @@ summary(PeterPaul.TN.anova.2way)
 plot(PeterPaul.TN.anova.2way)
 TukeyHSD(PeterPaul.TN.anova.2way)
 
-# try running pairwise, figure out code
+# Try running pairwise HSDTest, figure out code, ask Njeri in office hours 
 
-
-
-# Total nitrogen differs significantly across the two lakes but does not differ significantly seasonally and there is not a sigificant interaction effect between lake and month on total nitrogen (ANOVA, F1,4,4: 36.41, p<0.0001).
+# Total nitrogen differs significantly across the two lakes but does not differ significantly seasonally (two-way ANOVA with interaction effects, F1,4,4: 36.41, p<0.0001). Additionally, there is not a sigificant interaction effect between lake and month on total nitrogen.
 
 #6
+PeterPaul.TP.anova.2way <- aov(data = PeterPaul.Wrangled, tp_ug ~ lakename * month)
+summary(PeterPaul.TP.anova.2way)
 
+plot(PeterPaul.TP.anova.2way)
+TukeyHSD(PeterPaul.TP.anova.2way)
+
+# Total phosphorous differs significantly across the two lakes but does not differ significantly seasonally (two-way ANOVA with interaction effects, F1,4,4: 98.914, p<0.0001). Additionally, there is a significant interaction between lake and month on total phosphorous (two-way ANOVA with interaction effects, F,1,4,4: 2.452, p<0.05).
 
 ```
 
@@ -96,10 +100,35 @@ TukeyHSD(PeterPaul.TN.anova.2way)
 
 ```{r}
 #7
+# Plot 1
+NitrogenPlot <- ggplot(PeterPaul.Wrangled, aes(y = tn_ug, x = month, color = lakename)) +
+  geom_boxplot() +
+   stat_summary(geom = "text", fun.y = max, vjust = -1, size = 3.5, position = position_dodge(0.75),
+               label = c("x", "x", "x", "x", "x", "x", "x", "x", "x", "x")) +
+  labs(x = "month", y = expression(TN ~ (mu*g / L)),
+       color = "") +
+  scale_color_brewer(palette = "Set2") 
+print(NitrogenPlot)
 
+# Plot 2
+PhosphorousPlot <- ggplot(PeterPaul.Wrangled, aes(y = tp_ug, x = month, color = lakename)) +
+  geom_boxplot() +
+   stat_summary(geom = "text", fun.y = max, vjust = -1, size = 3.5, position = position_dodge(0.75),
+               label = c("x", "x", "x", "x", "x", "x", "x", "x", "x", "x")) +
+  labs(x = "month", y = expression(TP ~ (mu*g / L)),
+       color = "") +
+  scale_color_brewer(palette = "Set2") 
+print(PhosphorousPlot)
+
+# Come back later once run pairwise and add in labels (a,b,abc,etc.)
+# Ask Njeri how to get rid of the a coming up on legend titles and how to make sure labels don't get cut off at top
+# Also ask how to edit x axis to have dates rather than month #
+# How do you take out axis labels in cowplot without removing from original plot on its own?
 
 #8
-
+library(cowplot)
+plot_grid((NitrogenPlot + theme(legend.position = "top")), (PhosphorousPlot + theme(legend.position = "none")), nrow = 2, rel_heights = c(1.25, 1), align = 'v')
+print
 ```
 
 
