@@ -17,7 +17,7 @@ editor_options:
 ```{r, message = FALSE}
 getwd()
 library(tidyverse)
-options(scipen = 4)
+options(scipen = 4) # this is an option to use where it shows the number of digits in a result rather than giving expoential notation (so here, 4 digits but can set to anything)
 
 PeterPaul.chem.nutrients <- read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv")
 
@@ -53,10 +53,15 @@ summary(irradiance.regression)
 
 # Correlation
 cor.test(PeterPaul.chem.nutrients$irradianceWater, PeterPaul.chem.nutrients$depth)
+# This gives R value, square to get R2 and should match summary output above
 ```
 Question: How would you report the results of this test (overall findings and report of statistical output)?
 
->  
+> Some options:
+> At greater depth, irradiance decreases (linear regression, R2=0.31, df=15,449, p<0.0001).
+> Depth accounts for 31% of variance in lake irradiance (linear regression, R2=0.31, df=15,449, p<0.0001).
+> For each 1 m increase in depth, irradiance decreases by 95 units (find units) (linear regression, R2=0.31, df=15,449, p<0.0001).
+> Irradiance decreases significantly with decreasing depth (linear regression, R2=0.31, df=15,449, p<0.0001).
 
 So, we see there is a significant negative correlation between irradiance and depth (lower light levels at greater depths), and that this model explains about 31 % of the total variance in irradiance. Let's visualize this relationship and the model itself. 
 
@@ -71,9 +76,12 @@ An exploratory option to visualize the model fit is to use the function `plot`. 
 4. **Residuals vs. Leverage.** This graph will display potential outliers. The values that fall outside the dashed red lines (Cook's distance) are outliers for the model. Watch for drastic departures of the solid red line from horizontal - this is a sign of a poor model fit.
 
 ```{r, fig.height = 3, fig.width = 4}
-par(mfrow = c(2,2), mar=c(1,1,1,1))
+par(mfrow = c(2,2), mar=c(1,1,1,1)) # mar allows us to print when we knit the document
+# This is just a verification of the assumptions of our test, never should end up in final report
+# Residuals v. fitted plot: want to see horizontal line and no clustering of points in one location (same with scaled location plot), look for outliers too
 plot(irradiance.regression)
 par(mfrow = c(1,1))
+# This sets R back to giving one plot at a time instead of in quadrants
 ```
 
 The option best suited for communicating findings is to plot the explanatory and response variables as a scatterplot. 
@@ -82,16 +90,23 @@ The option best suited for communicating findings is to plot the explanatory and
 # Plot the regression
 irradiancebydepth <- 
   ggplot(PeterPaul.chem.nutrients, aes(x = depth, y = irradianceWater)) +
-  #ylim(0, 2000) +
+  ylim(0, 2000) +
   geom_point() 
 print(irradiancebydepth) 
+# One big outlier, remove by changing y axis limit
+# Exponential decay relationship, might want to think about log transforming some of our variables to better fit a linear model, might also want to think about whether to take out outlier
+# If log transforming values ofo 0 will give an error, in this case since so few, just remove them
 ```
 
 Given the distribution of irradiance values, we don't have a linear relationship between x and y in this case. Let's try log-transforming the irradiance values.
 
 ```{r, fig.height = 3, fig.width = 4}
+# Removing data pooints where irradiance is 0, so filtering to maintain values that are not equal to 0 and that are lower than 5000
 PeterPaul.chem.nutrients <- filter(PeterPaul.chem.nutrients, 
                                    irradianceWater != 0 & irradianceWater < 5000)
+# Log transforming
+# Always go with adjusted R2 since this accounts for sample size and df
+# No longer have very problematic departures from linear relationship, no extremely concerning outliers here
 irradiance.regression2 <- lm(data = PeterPaul.chem.nutrients, log(irradianceWater) ~ depth)
 summary(irradiance.regression2)
 
@@ -102,16 +117,20 @@ par(mfrow = c(1,1))
 # Add a line and standard error for the linear regression
 irradiancebydepth2 <- 
   ggplot(PeterPaul.chem.nutrients, aes(x = depth, y = irradianceWater)) +
+  # Geom_smooth is great for getting a line of best fit for 2 variables
   geom_smooth(method = "lm") +
   scale_y_log10() +
+  # Kateri prefers logging the scale of the axis rather than the variable, easier to interpret she thinks
   geom_point() 
 print(irradiancebydepth2) 
 
 # SE can also be removed
 irradiancebydepth2 <- 
     ggplot(PeterPaul.chem.nutrients, aes(x = depth, y = irradianceWater)) +
-    geom_point() +
+    geom_point(pch = 1, color = "dodgerblue") +
+  # pch changes the point type, another option: can set alpha = 0.5 to change transparency
     scale_y_log10() +
+  labs(x = "Depth (m)", y = "Irradiance (units)") +
     geom_smooth(method = 'lm', se = FALSE, color = "black")
 print(irradiancebydepth2)
 
@@ -134,6 +153,7 @@ It is possible, and often useful, to consider multiple continuous explanatory va
 TPregression <- lm(data = subset(PeterPaul.chem.nutrients, lakename == "Paul Lake"), 
                    tp_ug ~ depth + dissolvedOxygen)
 summary(TPregression)
+# Don't have to change data frame, but this subsets the dataset to only observations corresponding to Paul Lake
 
 TPplot <- ggplot(subset(PeterPaul.chem.nutrients, lakename == "Paul Lake"), 
                  aes(x = dissolvedOxygen, y = tp_ug, color = depth)) +
@@ -157,9 +177,10 @@ PeterPaulnutrients <-
   PeterPaul.chem.nutrients %>%
   select(tn_ug:po4) %>%
   na.omit()
-PeterPaulCorr <- cor(PeterPaulnutrients)
+# This omits any row in the dataset that has even 1 NA
+PeterPaulCorr <- cor(PeterPaulnutrients) # cor makes correlation matrix
 corrplot(PeterPaulCorr, method = "ellipse")
-corrplot.mixed(PeterPaulCorr, upper = "ellipse")
+corrplot.mixed(PeterPaulCorr, upper = "ellipse") # this gets rid of duplicates in matrix
 ```
 
 ## AIC to select variables
@@ -169,14 +190,16 @@ However, it is possible to over-parameterize a linear model. Adding additional e
 Let's say we want to know which explanatory variables will allow us to best predict total phosphorus concentrations. Potential explanatory variables from the dataset could include depth, dissolved oxygen, temperature, PAR, total N concentration, and phosphate concentration.
 
 ```{r}
+# Smaller the AIC value the better, more parsimonious model
 Paul.naomit <- PeterPaul.chem.nutrients %>%
   filter(lakename == "Paul Lake") %>%
   na.omit()
+# Paul lake is the control lake while Peter lake is where nutrients dumped in to test for eutrophication
 
 TPAIC <- lm(data = Paul.naomit, tp_ug ~ depth + dissolvedOxygen + 
               temperature_C + tn_ug + po4)
-step(TPAIC)
+step(TPAIC) # Create new model using what AIC test tells you has lowest AIC
 TPmodel <- lm(data = Paul.naomit, tp_ug ~ dissolvedOxygen + temperature_C + tn_ug)
 summary(TPmodel)
-
 ```
+> Result: Dissolved oxygen and temperature are significant predictors of total phosphorous (R2=0.258, df=3 and 109, p<0.001).
