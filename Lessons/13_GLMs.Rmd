@@ -17,11 +17,13 @@ editor_options:
 ```{r, message = FALSE}
 getwd()
 library(tidyverse)
+library(ggplot2)
 library(lubridate)
+library(viridisLite)
 library(viridis)
-#install.packages("nlme")
+install.packages("nlme")
 library(nlme)
-#install.packages("piecewiseSEM")
+install.packages("piecewiseSEM")
 library(piecewiseSEM)
 
 PeterPaul.chem.nutrients <- read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv")
@@ -33,7 +35,7 @@ NTL.chem$sampledate <- as.Date(NTL.chem$sampledate, format = "%m/%d/%y")
 mytheme <- theme_classic(base_size = 14) +
   theme(axis.text = element_text(color = "black"), 
         legend.position = "top")
-theme_set(mytheme)
+theme_set(mytheme)  # Not working, look at this later
 ```
 
 ## ANCOVA
@@ -44,17 +46,22 @@ Let's say we wanted to predict total nitrogen concentrations by depth and by lak
 ```{r, fig.height = 3, fig.width = 4}
 # main effects
 TNancova.main <- lm(data = PeterPaul.chem.nutrients, tn_ug ~ lakename + depth)
-summary(TNancova.main)
+summary(TNancova.main) # Can just run the lm function for any linear model, just an ancova because looking at conntinuous response variable by both continuous and categorical explanatory variables
 
 # interaction effects
 TNancova.interaction <- lm(data = PeterPaul.chem.nutrients, tn_ug ~ lakename * depth)
 summary(TNancova.interaction)
+# Intercept represents Paul Lake at depth of 0, so Paul Lake value at depth = 0 will be 228.74, at Peter Lake will be that intercept + 161.607
 
-TNplot <- ggplot(PeterPaul.chem.nutrients, aes(x = depth, y = tn_ug, color = lakename)) + 
+TNplot <- ggplot(PeterPaul.chem.nutrients, aes(x = depth, y = tn_ug, color = lakename)) +
   geom_point() + 
   geom_smooth(method = "lm", se = FALSE) +
-  xlim(0, 10)
+  xlim(0, 10) +
+   labs(x = "Depth (m)", y = expression(TN ~ (mu*g / L))) +
+          scale_color_manual(values = c("darkblue", "lightblue")) +
+          xlim(0,10)
 print(TNplot)
+# Can see that there is a significantly different slope for two different lakes
 
 # Make the graph attractive
 ```
@@ -123,8 +130,9 @@ ggplot(NTL.summertemp, aes(x = year4, y = temperature_C, color = lakename)) +
   labs(x = "", y = expression("Temperature " ( degree~C)), color = "") +
   theme(legend.spacing.x = unit(0, "cm"))
 print(NTL.tempmodel)
+# Only use line of best fit if you're testing for a linear model
 ```
 
 Question: How would you interpret the collective results of your mixed effects model in the context of the study question?
 
-> ANSWER: 
+> ANSWER: Accounting for variability between lakes, there is a significant increase in lake surface temperature over time.
