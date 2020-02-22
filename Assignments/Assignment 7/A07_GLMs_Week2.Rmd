@@ -117,21 +117,27 @@ a. Build and run a mixed effects model.
 b. Check the difference between the marginal and conditional R2 of the model. 
 
 ```{r}
-
-
+Litter.mixed <- lme(data = Litter.processed,
+                     dryMass ~ nlcdClass * functionalGroup, 
+                     random = ~1|plotID)
+summary(Litter.mixed)
+rsquared(Litter.mixed)
 ```
 
 b. continued... How much more variance is explained by adding the random effect to the model? 
 
-> Answer: 2 %
+> Answer: 26.8% of variance in dry mass is explained by the model when the random effect is added (as compared to 24.7% without the random effect).
 
 c. Run the same model without the random effect.
 d. Run an anova on the two tests. 
 ```{r}
- 
+Litter.fixed <- gls(data = Litter.processed,
+                      dryMass ~ nlcdClass * functionalGroup)
+summary(Litter.fixed)
 
+anova(Litter.mixed, Litter.fixed)
 ```
 
 d. continued... Is the mixed effects model a better model than the fixed effects model? How do you know?
 
-> Answer: 
+> Answer: Not sure, ask in office hours**
