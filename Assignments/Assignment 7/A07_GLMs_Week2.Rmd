@@ -29,8 +29,7 @@ The completed exercise is due on Tuesday, February 25 at 1:00 pm.
 #1
 getwd()
 library(tidyverse)
-install.packages("ggplot2")
-library(ggplot2)
+library(dplyr)
 install.packages("nlme")
 library(nlme)
 library(piecewiseSEM)
@@ -39,11 +38,10 @@ Chemistry.raw <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv")
 Litter.processed <- read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv")
 
 #2
-theme(axis.text = element_text(color = "black"), 
-        legend.position = "top")
+mytheme <- theme_classic(base_size = 12) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "bottom")
 theme_set(mytheme)
-# Having issues with theme_set, look into this
-
 ```
 
 
@@ -60,32 +58,57 @@ Research question: What is the best set of predictors for lake temperatures in J
 
 ```{r}
 #3
-
+Chemistry.wrangled <- 
+  Chemistry.raw %>%
+  filter(daynum > 181 & daynum < 213) %>%
+  select(lakename:daynum, depth, temperature_C) %>%
+  na.omit()
 
 #4
+Chemistry.AIC <- lm(data = Chemistry.wrangled, temperature_C ~ year4 + daynum + depth)
+step(Chemistry.AIC)
+Chemistry.model <- lm(data = Chemistry.wrangled, temperature_C ~ year4 + daynum + depth)
+summary(Chemistry.model)
 
+# Check with Njeri, should we be including lakename?
 ```
 
 5. What is the final set of explanatory variables that predict temperature from your multiple regression? How much of the observed variance does this model explain?
 
-> Answer: 
+> Answer: Year, day number, depth, and lake name all significantly predict temperature (multiple linear regression: F=9303, df=3,9718, p<0.0001). This model explains 74.2% of the observed variance in temperature (R2=0.7417).
+
+>#Ask Njeri, should we be reporting F statistic or r2 here?
 
 6. Run an interaction effects ANCOVA to predict temperature based on depth and lakename from the same wrangled dataset.
 
 ```{r}
 #6
-
+Chemistry.ancova.interaction <- lm(data = Chemistry.wrangled, temperature_C ~ lakename * depth)
+summary(Chemistry.ancova.interaction)
 ```
 
 7. Is there a significant interaction between depth and lakename? How much variance in the temperature observations does this explain?
 
-> Answer: 
+> Answer: Yes, there is a significant interaction between depth and lakename (ANCOVA: F=2097, df=17,9704, p<0.0001). This model explains 78.6% of observed variation in temperature (R2=0.7857).
+
+>Again, ask Njeri if this is the right way to be reporting results.
 
 8. Create a graph that depicts temperature by depth, with a separate color for each lake. Add a geom_smooth (method = "lm", se = FALSE) for each lake. Make your points 50 % transparent. Adjust your y axis limits to go from 0 to 35 degrees. Clean up your graph to make it pretty. 
 
 ```{r}
 #8
+library(RColorBrewer)
 
+Tempplot <- ggplot(Chemistry.wrangled, aes(x = depth, y = temperature_C, color = lakename)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, alpha = 0.5) +
+  ylim(0, 35) +
+labs(x = "Depth (m)", y = "Temperature (C)", color = "Lake name") +
+  scale_color_brewer(palette = "Paired") +
+  theme(legend.position = "top")
+print(Tempplot)
+
+# How to make it look better that this? Really messy...
 ```
 
 9. Run a mixed effects model to predict dry mass of litter. We already know that nlcdClass and functionalGroup have a significant interaction, so we will specify those two variables as fixed effects with an interaction. We also know that litter mass varies across plot ID, but we are less interested in the actual effect of the plot itself but rather in accounting for the variance among plots. Plot ID will be our random effect.
