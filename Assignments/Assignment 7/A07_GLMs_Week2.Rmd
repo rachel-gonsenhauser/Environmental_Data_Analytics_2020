@@ -107,8 +107,6 @@ labs(x = "Depth (m)", y = "Temperature (C)", color = "Lake name") +
   scale_color_brewer(palette = "Paired") +
   theme(legend.position = "top")
 print(Tempplot)
-
-# How to make it look better that this? Really messy...***
 ```
 
 9. Run a mixed effects model to predict dry mass of litter. We already know that nlcdClass and functionalGroup have a significant interaction, so we will specify those two variables as fixed effects with an interaction. We also know that litter mass varies across plot ID, but we are less interested in the actual effect of the plot itself but rather in accounting for the variance among plots. Plot ID will be our random effect.

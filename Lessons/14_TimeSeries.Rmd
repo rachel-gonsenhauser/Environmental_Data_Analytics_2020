@@ -19,9 +19,9 @@ editor_options:
 getwd()
 library(tidyverse)
 library(lubridate)
-#install.packages("trend")
+install.packages("trend")
 library(trend)
-#install.packages("zoo")
+install.packages("zoo")
 library(zoo)
 
 # Set theme
@@ -33,7 +33,7 @@ theme_set(mytheme)
 EnoDischarge <- read.csv("./Data/Processed/USGS_Site02085000_Flow_Processed.csv")
 EnoDischarge$datetime <- as.Date(EnoDischarge$datetime, format = "%Y-%m-%d")
 
-NCAir <- read.csv("./Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
+NCAir <- read.csv("./Data/Processed/EPAair_O3_PM25_NC1819_Processed_KS.csv")
 NCAir$Date <- as.Date(NCAir$Date, format = "%Y-%m-%d")
 ```
 
@@ -78,9 +78,11 @@ Let's start by removing the NAs and splitting the dataset into the early and lat
 ```{r}
 EnoDischarge.complete <- EnoDischarge %>%
   drop_na(discharge.mean)
+# drop_na only drops rows where NAs are present in a specified column of data whereas na.exclude and na.omit take away all rows in whole dataset where there is an NA
 
 EnoDischarge.early <- EnoDischarge.complete %>%
   filter(datetime < as.Date("1985-01-01"))
+# When you filter you still need to tell R to format as a date
 
 EnoDischarge.late <- EnoDischarge.complete %>%
   filter(datetime > as.Date("1985-01-01"))
@@ -103,13 +105,17 @@ Note: time series objects must be equispaced. In our case, we have daily data wi
 
 ```{r}
 EnoDischarge.late_ts <- ts(EnoDischarge.late[[8]], frequency = 365)
+# Time series function
+# For ts function, double square brackets allows you to take just data from one column (8tth column of dataset)
 ```
 
 The `stl` function decomposes the time series object into its component parts. We must specify that the window for seasonal extraction is either "periodic" or a specific number of at least 7. The decomposition proceeds through a loess (locally estimated scatterplot smoothing) function.
 
 ```{r}
 ?stl
+# or help(stl)
 # Generate the decomposition
+# Need to input a ts object, can't just provide the dataframe
 EnoDischarge.late_Decomposed <- stl(EnoDischarge.late_ts, s.window = "periodic")
 
 # Visualize the decomposed series. 
@@ -124,7 +130,7 @@ EnoDischarge.late_Components <- mutate(EnoDischarge.late_Components,
 # Visualize how the trend maps onto the data
 ggplot(EnoDischarge.late_Components) +
   geom_line(aes(y = Observed, x = Date),  size = 0.25) +
-  geom_line(aes(y = trend, x = Date), color = "#c13d75ff") +
+  geom_line(aes(y = trend, x = Date), color = "#c13d75ff", size = 1) +
   geom_hline(yintercept = 0, lty = 2) +
   ylab(expression("Discharge (ft"^3*"/s)"))
 
@@ -168,11 +174,14 @@ shapiro.test(EnoDischarge.late.subsample$discharge.mean)
 var.test(EnoDischarge.early$discharge.mean, EnoDischarge.late$discharge.mean)
 
 wilcox.test(EnoDischarge.early$discharge.mean, EnoDischarge.late$discharge.mean)
+summary(EnoDischarge.early$discharge.mean)
+summary(EnoDischarge.late$discharge.mean)
 ```
 
 How might you interpret the results of this test, and how might you represent them graphically?
 
->
+> Mean daily discharge in the Eno River from 1927-1971 was significantly higher than mean daily discharge from 1985-2019 (Wilcoxon test, W = 1.17*10^17, p<0.0001). You could use a violin plot or a boxplot to graph the difference between the mean discharge of early and later years.
+
 
 ### Monotonic trend analysis
 
