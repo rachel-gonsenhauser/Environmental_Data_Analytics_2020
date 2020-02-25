@@ -138,4 +138,4 @@ anova(Litter.mixed, Litter.fixed)
 
 d. continued... Is the mixed effects model a better model than the fixed effects model? How do you know?
 
-> Answer: Not sure, ask in office hours**
+> Answer: The mixed effects model is the better model because it has a lower AIC value. This means that the mixed effects model is more parsimonious while also accounting for a good amount of variation in the response variable.
