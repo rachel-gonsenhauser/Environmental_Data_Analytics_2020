@@ -69,15 +69,11 @@ Chemistry.AIC <- lm(data = Chemistry.wrangled, temperature_C ~ year4 + daynum + 
 step(Chemistry.AIC)
 Chemistry.model <- lm(data = Chemistry.wrangled, temperature_C ~ year4 + daynum + depth)
 summary(Chemistry.model)
-
-# Check with Njeri, should we be including lakename here?***
 ```
 
 5. What is the final set of explanatory variables that predict temperature from your multiple regression? How much of the observed variance does this model explain?
 
-> Answer: Year, day number, and depth all significantly predict temperature (multiple linear regression: F=9303, df=3,9718, p<0.0001). This model explains 74.2% of the observed variance in temperature (R2=0.7417).
-
->#Ask Njeri, should we be reporting F statistic or r2 here?***
+> Answer: The final set of explanatory variables that predict temperature are year, day number, and depth. Year, day number, and depth all significantly predict temperature (multiple linear regression: F=9303, df=3 and 9718, p<0.0001). This model explains 74.2% of the observed variance in temperature (R2=0.7417).
 
 6. Run an interaction effects ANCOVA to predict temperature based on depth and lakename from the same wrangled dataset.
 
@@ -89,9 +85,7 @@ summary(Chemistry.ancova.interaction)
 
 7. Is there a significant interaction between depth and lakename? How much variance in the temperature observations does this explain?
 
-> Answer: Yes, there is a significant interaction between depth and lakename (ANCOVA: F=2097, df=17,9704, p<0.0001). This model explains 78.6% of observed variation in temperature (R2=0.7857).
-
->Again, ask Njeri if this is the right way to be reporting results***
+> Answer: Yes, there is a significant interaction between depth and lake name (ANCOVA: F=2097, df=17 and 9704, p<0.0001). This model explains 78.6% of observed variation in temperature (R2=0.7857).
 
 8. Create a graph that depicts temperature by depth, with a separate color for each lake. Add a geom_smooth (method = "lm", se = FALSE) for each lake. Make your points 50 % transparent. Adjust your y axis limits to go from 0 to 35 degrees. Clean up your graph to make it pretty. 
 
@@ -100,8 +94,8 @@ summary(Chemistry.ancova.interaction)
 library(RColorBrewer)
 
 Tempplot <- ggplot(Chemistry.wrangled, aes(x = depth, y = temperature_C, color = lakename)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE, alpha = 0.5) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
   ylim(0, 35) +
 labs(x = "Depth (m)", y = "Temperature (C)", color = "Lake name") +
   scale_color_brewer(palette = "Paired") +
@@ -124,7 +118,7 @@ rsquared(Litter.mixed)
 
 b. continued... How much more variance is explained by adding the random effect to the model? 
 
-> Answer: 26.8% of variance in dry mass is explained by the model when the random effect is added (as compared to 24.7% without the random effect).
+> Answer: 26.8% of variance in dry mass is explained by the model when the random effect is added (as compared to 24.7% without the random effect). As such, about 2.13% more variance is explained by adding the random effect to the model.
 
 c. Run the same model without the random effect.
 d. Run an anova on the two tests. 
@@ -138,6 +132,4 @@ anova(Litter.mixed, Litter.fixed)
 
 d. continued... Is the mixed effects model a better model than the fixed effects model? How do you know?
 
-> Answer: The mixed effects model is the better model because it has a lower AIC value. This means that the mixed effects model is more parsimonious while also accounting for a good amount of variation in the response variable.
-
->Check interpretation here with Njeri***
+> Answer: The mixed effects model is the better model because it has a lower AIC value (p<0.0001). This means that the mixed effects model is more parsimonious while also accounting for a good amount of variation in the response variable.
