@@ -189,11 +189,11 @@ In general, detecting a monotonic trend requires a long sequence of data with fe
 
 Adjusting the data may be necessary to fulfill the assumptions of a trend test. These adjustments include **aggregation**, **subsampling**, and **interpolation**. What do each of these mean, and why might we want to use them?
 
-> aggregation: 
+> aggregation: taking multiple data points and making one data point from them (e.g. taking mean of monthly data to get annual average), would use if you have a lot of data and want to aggregate into a longer time span
 
-> subsampling: 
+> subsampling: taking a subset of the existing dataset (e.g. if you have daily data, you could take the first day of each month to subsample to get one point for each month OR if you're missing data for a bunch of years, only using years with complete cases) , this method is probably used the least in time series analysis
 
-> interpolation: 
+> interpolation: filling missing cases/data gaps in the dataset (examples below)
 
 Common interpolation methods: 
 
@@ -230,7 +230,7 @@ ggplot(NCAir.Garinger, aes(x = Date, y = Ozone)) +
 print(GaringerOzone)
 
 # na.approx function fills in NAs with a linear interpolation
-# Spline interpolation can also be specified as an alternative
+# Spline interpolation can also be specified as an alternative, defaults to linear interpolation
 # Piecewise constant interpolation can be done with na.aggregate
 NCAir.Garinger$Ozone <- na.approx(NCAir.Garinger$Ozone)
 NCAir.Garinger$PM2.5 <- na.approx(NCAir.Garinger$PM2.5)
@@ -293,7 +293,7 @@ print(EnoDischarge.monthly)
 
 What would we conclude based on these findings? 
 
->
+>There is not a significant monotonic/seasonal trend in discharge data at the Eno River over the period of 1985-2019 (seasonal Mann-Kendall: z=-0.13967, p=0.8889). We did not detect any trends across individual months in the dataset.
  
 If a significant trend was present, we could compute a **Sen's Slope** to quantify that trend (`sens.slope` function in the trend package).
 
