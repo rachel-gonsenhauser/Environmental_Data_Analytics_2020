@@ -1,6 +1,6 @@
 ---
 title: "Assignment 8: Time Series Analysis"
-author: "Student Name"
+author: "Rachel Gonsenhauser"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -29,8 +29,27 @@ The completed exercise is due on Tuesday, March 3 at 1:00 pm.
 * Import the ten datasets from the Ozone_TimeSeries folder in the Raw data folder. These contain ozone concentrations at Garinger High School in North Carolina from 2010-2019 (the EPA air database only allows downloads for one year at a time). Call these GaringerOzone201*, with the star filled in with the appropriate year in each of ten cases.
 
 ```{r, message = FALSE}
+getwd()
+library(tidyverse)
+library(lubridate)
+library(zoo)
+library(trend)
 
+mytheme <- theme_classic(base_size = 12) +
+  theme(axis.text = element_text(color = "black"),
+        legend.position = "bottom")
+theme_set(mytheme)
 
+GaringerOzone2010 <- read.csv("./Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2010_raw.csv")
+GaringerOzone2011 <- read.csv("./Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2011_raw.csv")
+GaringerOzone2012 <- read.csv("./Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2012_raw.csv")
+GaringerOzone2013 <- read.csv("./Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2013_raw.csv")
+GaringerOzone2014 <- read.csv("./Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2014_raw.csv")
+GaringerOzone2015 <- read.csv("./Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2015_raw.csv")
+GaringerOzone2016 <- read.csv("./Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2016_raw.csv")
+GaringerOzone2017 <- read.csv("./Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2017_raw.csv")
+GaringerOzone2018 <- read.csv("./Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2018_raw.csv")
+GaringerOzone2019 <- read.csv("./Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2019_raw.csv")
 ```
 
 ## Wrangle
@@ -47,19 +66,23 @@ The completed exercise is due on Tuesday, March 3 at 1:00 pm.
 
 ```{r}
 # 2 
-
+GaringerOzone <- rbind(GaringerOzone2010, GaringerOzone2011, GaringerOzone2012, GaringerOzone2013, GaringerOzone2014, GaringerOzone2015, GaringerOzone2016, GaringerOzone2017, GaringerOzone2018, GaringerOzone2019)
 
 # 3
-
+GaringerOzone$Date <- as.Date(GaringerOzone$Date, format = "%m/%d/%Y")
+class(GaringerOzone$Date)
 
 # 4
-
+GaringerOzone.wrangled <- 
+  GaringerOzone %>%
+  select(Date, Daily.Max.8.hour.Ozone.Concentration, DAILY_AQI_VALUE)
 
 # 5
-
+Days <- as.data.frame(GaringerOzone.wrangled$Date[2010-01-01:2019-12-13])
+# Figure out how to do this step
 
 # 6
-
+left_join()
 
 ```
 
