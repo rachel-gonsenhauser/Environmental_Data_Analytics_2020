@@ -78,11 +78,14 @@ GaringerOzone.wrangled <-
   select(Date, Daily.Max.8.hour.Ozone.Concentration, DAILY_AQI_VALUE)
 
 # 5
-Days <- as.data.frame(GaringerOzone.wrangled$Date[2010-01-01:2019-12-13])
-# Figure out how to do this step
+Days <-
+  as.data.frame(GaringerOzone.wrangled$Date, seq(2010-01-01:2019-12-13))
+colnames(Days) <- c("Date")
+
+# Getting warning message, did I do this correctly?**
 
 # 6
-left_join()
+GaringerOzone <- left_join()
 
 ```
 
@@ -91,7 +94,11 @@ left_join()
 7. Create a ggplot depicting ozone concentrations over time. In this case, we will plot actual concentrations in ppm, not AQI values. Format your axes accordingly.
 
 ```{r}
-
+GaringerOzonePlot <- 
+  ggplot(GaringerOzone, aes(x = Date, y = Daily.Max.8.hour.Ozone.Concentration)) +
+  geom_point()
+  labs(x = "Date", y = "Ozone concentration (ppm)")
+print(GaringerOzonePlot)
 
 ```
 
