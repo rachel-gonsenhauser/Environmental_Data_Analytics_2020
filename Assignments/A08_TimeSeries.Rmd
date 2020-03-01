@@ -110,7 +110,9 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 
 8. Use a linear interpolation to fill in missing daily data for ozone concentration. Why didn't we use a piecewise constant or spline interpolation?
 
-> Answer: come back***
+> Answer: In this case, using a piecewise constant would be inappropriate because this would assume that missing data are equal to the measurement made nearest to that date, and this is not necessarily a correct assumption for ozone concentrations. Additionally, spline interpolation is inappropriate because this uses a quadratic function to interpolate, and we have no reason to expect that the data fits to a quadratic equation from the plot of data examined above. 
+
+>Check during office hours, is this a correct explanation?***
 
 9. Create a new data frame called GaringerOzone.monthly that contains aggregated data: mean ozone concentrations for each month. In your pipe, you will need to first add columns for year and month to form the groupings. In a separate line of code, create a new Date column with each month-year combination being set as the first day of the month (this is for graphing purposes only)
 
@@ -118,7 +120,9 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 
 11. Run a time series analysis. In this case the seasonal Mann-Kendall is most appropriate; why is this?
 
-> Answer: 
+> Answer: The seasonal Mann-Kendall is the most appropriate time series analysis to run in this case because it assumes seasonality,...
+
+> Finish later, check during office hours***
 
 12. To figure out the slope of the trend, run the function `sea.sens.slope` on the time series dataset. 
 
@@ -146,16 +150,26 @@ GaringerOzone.monthly.ts <-
                         start = c(2010, 01, 01), end = c(2019, 12, 31))
 
 # 11
+GaringerOzone.trend <- smk.test(GaringerOzone.monthly.ts)
+GaringerOzone.trend
+summary(GaringerOzone.trend)
  
-
 # 12
+sea.sens.slope(GaringerOzone.monthly.ts)
+
+# Am I running this on the correct object?**
 
 
 # 13
-
-
+GaringerOzonePlot.monthly <-
+  ggplot(GaringerOzone.monthly, aes(x = Date, y = Daily.Max.8.hour.Ozone.Concentration)) +
+   geom_point() +
+  labs(x = "Date", y = "Ozone concentration (ppm)")
+print(GaringerOzonePlot.monthly)
 ```
 
 14. To accompany your graph, summarize your results in context of the research question. Include output from the statistical test in parentheses at the end of your sentence. Feel free to use multiple sentences in your interpretation.
 
-> Answer: 
+> Answer: There is a significant seasonal trend in ozone concentration data at Garinger High School over the period of 2010-2019 (seasonal Mann-Kendall: z=-2.2478, p=0.02459). The slope of this trend indicates that ozone concentrations are slightly decreasing over time at Garinger High School (Sen's Slope=-0.000207152). We did not detect any trends across individual months in the dataset.
+
+>Ask in office hours: is this interpretation correct?***
