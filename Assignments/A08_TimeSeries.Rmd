@@ -79,7 +79,7 @@ GaringerOzone.wrangled <-
 
 # 5
 Days <-
-  as.data.frame(GaringerOzone.wrangled$Date, seq(2010-01-01:2019-12-13))
+  as.data.frame(GaringerOzone.wrangled$Date, seq(2010-01-01:2019-12-31))
 colnames(Days) <- c("Date")
 
 # Getting warning message, did I do this correctly?**
