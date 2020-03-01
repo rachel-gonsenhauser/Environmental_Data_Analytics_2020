@@ -141,7 +141,9 @@ GaringerOzone.monthly$Date <- as.Date(paste(GaringerOzone.monthly$Year,
                                           format = "%Y-%m-%d")
 
 # 10
-
+GaringerOzone.monthly.ts <-
+  ts(GaringerOzone.monthly$Daily.Max.8.hour.Ozone.Concentration, frequency = 12, 
+                        start = c(2010, 01, 01), end = c(2019, 12, 31))
 
 # 11
  
