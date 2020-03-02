@@ -79,17 +79,15 @@ GaringerOzone.wrangled <-
 
 # 5
 Days <-
-  as.data.frame(GaringerOzone.wrangled$Date, seq(2010-01-01:2019-12-31))
+  as.data.frame(seq(as.Date('2010-01-01'),
+                     as.Date('2019-12-31'), by = 'days'), times = num_repeat)
 colnames(Days) <- c("Date")
 
-# Getting warning message, did I do this correctly?**
+# Is this right?**
 
 # 6
 GaringerOzone <- left_join(Days,
                            GaringerOzone.wrangled)
-
-# How to do this? Coming up short on observations, probably because some omitted in above step**
-
 ```
 
 ## Visualize
@@ -162,7 +160,8 @@ sea.sens.slope(GaringerOzone.monthly.ts)
 
 # 13
 GaringerOzonePlot.monthly <-
-  ggplot(GaringerOzone.monthly, aes(x = Date, y = Daily.Max.8.hour.Ozone.Concentration)) +
+  ggplot(GaringerOzone.monthly, 
+         aes(x = Date, y = Daily.Max.8.hour.Ozone.Concentration)) +
    geom_point() +
   labs(x = "Date", y = "Ozone concentration (ppm)")
 print(GaringerOzonePlot.monthly)
