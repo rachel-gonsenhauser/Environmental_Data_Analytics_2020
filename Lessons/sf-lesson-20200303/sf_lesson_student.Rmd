@@ -48,6 +48,9 @@ library("tidyr")
 library("ggplot2")
 library("purrr")
 # some spatial data packages
+install.packages("sf")
+install.packages("ggmap")
+install.packages("here")
 library("sf")
 library("ggmap")
 # some other packages
@@ -279,10 +282,9 @@ I like to always save a copy of the raw data in my R session and rename all new 
 
 ```{r activity.load.data}
 # add your code here
-gages_raw <- 
-southeast_state_bounds_raw <- 
-my_tabular_data_raw <- 
-
+gages_raw <-  st_read(here("data", "spatial_data", "gagesII_9322_sept30_2011.shp"))
+southeast_state_bounds_raw <-  st_read(here("data", "spatial_data", "southeast_state_bounds.shp"))
+my_tabular_data_raw <- read.csv(here("data", "tabular_data", "conterm_climate.txt"))
 # red warning text is telling you how the data is being parsed
 ```
 
@@ -304,6 +306,11 @@ Use base R commands to answer the following questions (for basins_nf_seplains_ra
 ```{r activity.check.out.data}
 
 # add your code here
+class(basins_nf_seplains_raw)
+colnames(basins_nf_seplains_raw)
+dim(basins_nf_seplains_raw)
+attributes(basins_nf_seplains_raw)
+head(basins_nf_seplains_raw)
 
 # bonus, add your code here
 ```
@@ -325,10 +332,22 @@ Use st_crs() to look at the CRSs of the spatial data you have loaded up so far. 
 
 ```{r activity.check.out.data.again}
 # add your code here
+st_crs(basins_nf_seplains_raw)
+st_crs(gages_raw)
+st_crs(southeast_state_bounds_raw)
+my_proj4 <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs"
+my_epsg <- 5070
 
 # first two will not have EPSG code but have proj4 string (i.e., "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs")
 
 # last one will have EPSG code 5070 and proj4 string (i.e., "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"), this one looks good!
+
+st_crs(basins_nf_seplains_raw) <- my_proj4
+st_crs(basins_nf_seplains_raw) <- my_epsg
+st_crs(gages_raw) <- my_proj4
+st_crs(gages_raw) <- my_epsg
+st_crs(southeast_state_bounds_raw) <- my_proj4
+st_crs(southeast_state_bounds_raw) <- my_epsg
 
 # we want them all to be the same!
 ```
@@ -436,6 +455,7 @@ names(gages_tabular)
 
 # convert to sf object
 gages_tabular_as_sf <- st_as_sf(gages_tabular, coords = c("LNG_GAGE", "LAT_GAGE"), crs = 4326, dim = "XY") # lat long so set CRS = WGS84
+# st_as_sf, go into help file to look up
 
 # check class and CRS
 class(gages_tabular_as_sf)
