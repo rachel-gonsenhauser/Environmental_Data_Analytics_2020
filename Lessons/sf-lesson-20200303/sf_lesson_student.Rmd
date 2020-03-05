@@ -578,7 +578,7 @@ Usually, I (Sheila) use RStudio to visualize all of my plots but since spatial d
 # basic plot
 pdf(here("outputs", "southeast_state_bounds.pdf"), width = 11, height = 8.5)
 ggplot() +
-  geom_sf(data = southeast_state_bounds) + # you can add color = "blue" to change outline color to blue or lwd = 2 to change the width of the lines
+  geom_sf(data = southeast_state_bounds) + # you can add color = "blue" to change outline color to blue or lwd = 2 to change the width of the lines, set the boundary as the first layer of data, then the points can be the second layer on top of the base
   theme_bw() # add this to make the background white and not grey
 dev.off()
 
@@ -605,9 +605,16 @@ Let's check your operations from the 3.1.2 activity. You are trying for somethin
 
 ```{r activity.checking.operations}
 # plot NC watershed boundardies from 3.1.2
-pdf(here("outputs", "spatial_operations_test_fig.pdf"), width = 11, height = 8.5)
-# add your code here
+pdf(here("outputs", "nc_basins.pdf"), width = 11, height = 8.5)
+ggplot() +
+  geom_sf(data = nc_state_bounds_geom) +
+  geom_sf(data = nc_basins_nf_seplains, fill = "pink", alpha = 0.25) +
+geom_sf(data = nc_gages, color = "black") +
+  theme_bw() 
 dev.off()
+# add your code here
+
+
 ```
 
 Notice a few things about Figure 1a: (1) the watersheds are nested (there are smaller ones inside bigger ones), (2) the larger watersheds are cut by the NC state boundaries, and (3) there are some gages that are outside the watershed bounds (i.e., we don't have watershed basins or tabular data for them).
@@ -636,7 +643,7 @@ nc_bbox_fix <- c(left = nc_bbox[[1]], bottom = nc_bbox[[2]], right = nc_bbox[[3]
 nc_bbox_fix
 
 # get basemap
-nc_basemap <- get_map(nc_bbox_fix, maptype = 'terrain-background', source = 'stamen', zoom = 8)
+nc_basemap <- get_map(nc_bbox_fix, maptype = 'terrain-background', source = 'stamen', zoom = 8) # a bit more zoomed out than city scale (10)
 class(nc_basemap)
 st_crs(nc_basemap)
 # you'll have to trust me that this will have a CRS = WGS84
@@ -740,6 +747,9 @@ names(nc_gages)
 # use "STAID"
 
 # join the tabular data to nc_gages
+
+# need to mutate tabular so they can join, look later
+
 nc_gages_climate <- nc_gages %>%
   left_join(my_tabular_data_raw, by = "STAID")
 
