@@ -25,6 +25,108 @@ Here are your three options:
 
 1. Reproduce figure 1b from the spatial lesson, found in section 3.2.2. You may choose a state other than North Carolina, but your map should still contain the spatial features contained in figure 1b in the "img" folder. 
 
+``` {r}
+#Loading packages
+library("readr")
+library("dplyr")
+library("tidyr")
+library("ggplot2")
+library("purrr")
+library("sf")
+library("ggmap")
+library("here")
+
+#Loading in data
+basins_nf_seplains_raw <- st_read(here("data", "spatial_data", "bas_nonref_SEPlains.shp"))
+gages_raw <- st_read(here("data", "spatial_data", "gagesII_9322_sept30_2011.shp"))
+southeast_state_bounds_raw <- st_read(here("data", "spatial_data", "southeast_state_bounds.shp"))
+my_tabular_data_raw <- read_csv(here("data", "tabular_data", "conterm_climate.txt"))
+
+#Checking EPSG source and project code and resetting
+st_crs(basins_nf_seplains_raw)
+st_crs(gages_raw)
+st_crs(southeast_state_bounds_raw)
+
+#Converting tabular to spatial data
+gages_tabular <- read_csv(here("data", "tabular_data", "gagesII_sept30_2011_tabular.csv")) %>%
+  as.data.frame()
+
+names(gages_tabular)
+gages_tabular_as_sf <- st_as_sf(gages_tabular, coords = c("LNG_GAGE", "LAT_GAGE"), crs = 4326, dim = "XY")
+
+class(gages_tabular_as_sf)
+head(gages_tabular_as_sf)
+st_crs(gages_tabular_as_sf)
+
+#Choose state boundary
+sc_state_bounds_geom <- southeast_state_bounds %>%
+  filter(NAME == "South Carolina") %>%
+  st_geometry()
+
+#Select watersheds that intersect with SC state bounds
+sc_basins_nf_seplains <- basins_nf_seplains %>%
+  st_intersection(sc_state_bounds_geom)
+head(sc_basins_nf_seplains)
+
+#Select gages
+sc_gages <- gages %>%
+  st_intersection(sc_basins_nf_seplains)
+
+st_crs(sc_state_bounds_geom)
+st_crs(sc_gages)
+st_crs(sc_basins_nf_seplains)
+
+#Transform layers to same reference system
+sc_basins_wgs84 <- sc_basins_nf_seplains %>%
+  st_transform(4326) 
+
+sc_gages_wgs84 <- sc_gages %>%
+  st_transform(4326) 
+
+sc_stateboundary_wgs84 <- sc_state_bounds_geom %>%
+  st_transform(4326) 
+
+#Adding basemap
+sc_bbox <- sc_state_bounds_geom %>%
+  st_buffer(dist = 150000) %>% 
+  st_transform(4326) %>% 
+  st_bbox()
+sc_bbox
+
+sc_bbox_fix <- c(left = sc_bbox[[1]], bottom = sc_bbox[[2]], right = sc_bbox[[3]], top = sc_bbox[[4]])
+
+sc_basemap <- get_map(sc_bbox_fix, maptype = 'terrain-background', source = 'stamen', zoom = 8)
+class(sc_basemap)
+st_crs(sc_basemap)
+
+sc_state_bounds_geom_wsg84 <- sc_state_bounds_geom %>%
+  st_transform(4326)
+
+#Plotting with basemap
+pdf(here("outputs", "sc_with_basemap.pdf"), width = 11, height = 8.5)
+ggmap(sc_basemap) +
+  geom_sf(data = sc_state_bounds_geom_wsg84, fill = NA, lwd = 1, inherit.aes = FALSE)
+dev.off()
+
+#Creating 1b map
+pdf(here("outputs", "RachelGonsenhauser_A09_Spatial.pdf"), width = 11, height = 8.5) 
+  ggmap(sc_basemap) +
+  geom_sf(data = sc_stateboundary_wgs84, fill = NA, lwd = 1, inherit.aes = FALSE) +
+  geom_sf(data = sc_basins_wgs84, alpha = 0.25) +
+  geom_sf(data = sc_gages_wgs84, lwd = 1) +
+  theme_bw()
+dev.off()
+
+#Test for gages and basins
+pdf(here("outputs", "test of gages and basins.pdf"), width = 11, height = 8.5)
+ggplot() +  
+ geom_sf(data = sc_gages_wgs84, lwd = 1) +
+    geom_sf(data = sc_basins_wgs84, alpha = 0.25) +
+  theme_bw()
+dev.off()
+  
+```
+
 2. Create a new map that mixes spatial and tabular data, as in section 3.3 of the spatial lesson. You may use the maps created in the lesson as an example, but your map should contain data other than precipitation days per year. This map should include: 
 
 * State boundary layer
