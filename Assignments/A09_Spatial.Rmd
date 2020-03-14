@@ -37,10 +37,10 @@ library("ggmap")
 library("here")
 
 #Loading in data
-basins_nf_seplains_raw <- st_read(here("data", "spatial_data", "bas_nonref_SEPlains.shp"))
-gages_raw <- st_read(here("data", "spatial_data", "gagesII_9322_sept30_2011.shp"))
-southeast_state_bounds_raw <- st_read(here("data", "spatial_data", "southeast_state_bounds.shp"))
-my_tabular_data_raw <- read_csv(here("data", "tabular_data", "conterm_climate.txt"))
+basins_nf_seplains <- st_read(here("data", "spatial_data", "bas_nonref_SEPlains.shp"))
+gages <- st_read(here("data", "spatial_data", "gagesII_9322_sept30_2011.shp"))
+southeast_state_bounds <- st_read(here("data", "spatial_data", "southeast_state_bounds.shp"))
+my_tabular_data <- read_csv(here("data", "tabular_data", "conterm_climate.txt"))
 
 #Checking EPSG source and project code and resetting
 st_crs(basins_nf_seplains_raw)
@@ -112,8 +112,10 @@ dev.off()
 pdf(here("outputs", "RachelGonsenhauser_A09_Spatial.pdf"), width = 11, height = 8.5) 
   ggmap(sc_basemap) +
   geom_sf(data = sc_stateboundary_wgs84, fill = NA, lwd = 1, inherit.aes = FALSE) +
-  geom_sf(data = sc_basins_wgs84, alpha = 0.25) +
-  geom_sf(data = sc_gages_wgs84, lwd = 1) +
+  geom_sf(data = sc_basins_wgs84, alpha = 0.25, inherit.aes = FALSE) +
+  geom_sf(data = sc_gages_wgs84, lwd = 1, inherit.aes = FALSE) +
+    labs(x = "longitude", y = "latitude",
+       color = "") +
   theme_bw()
 dev.off()
 
