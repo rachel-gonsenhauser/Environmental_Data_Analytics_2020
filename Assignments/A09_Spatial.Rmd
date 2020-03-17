@@ -43,9 +43,9 @@ southeast_state_bounds <- st_read(here("data", "spatial_data", "southeast_state_
 my_tabular_data <- read_csv(here("data", "tabular_data", "conterm_climate.txt"))
 
 #Checking EPSG source and project code and resetting
-st_crs(basins_nf_seplains_raw)
-st_crs(gages_raw)
-st_crs(southeast_state_bounds_raw)
+st_crs(basins_nf_seplains)
+st_crs(gages)
+st_crs(southeast_state_bounds)
 
 #Converting tabular to spatial data
 gages_tabular <- read_csv(here("data", "tabular_data", "gagesII_sept30_2011_tabular.csv")) %>%
@@ -64,9 +64,9 @@ sc_state_bounds_geom <- southeast_state_bounds %>%
   st_geometry()
 
 #Select watersheds that intersect with SC state bounds
-sc_basins_nf_seplains <- basins_nf_seplains %>%
-  st_intersection(sc_state_bounds_geom)
-head(sc_basins_nf_seplains)
+#sc_basins_nf_seplains <- basins_nf_seplains %>%
+  #st_intersection(sc_state_bounds_geom)
+#head(sc_basins_nf_seplains)
 
 #Select gages
 sc_gages <- gages %>%
