@@ -41,7 +41,9 @@ basins_nf_seplains <- st_read(here("data", "spatial_data", "bas_nonref_SEPlains.
 gages <- st_read(here("data", "spatial_data", "gagesII_9322_sept30_2011.shp"))
 southeast_state_bounds <- st_read(here("data", "spatial_data", "southeast_state_bounds.shp"))
 my_tabular_data <- read_csv(here("data", "tabular_data", "conterm_climate.txt"))
+```
 
+``` {r}
 #Checking EPSG source and project code and resetting
 st_crs(basins_nf_seplains)
 st_crs(gages)
@@ -72,9 +74,11 @@ st_crs(sc_gages)
 st_crs(sc_basins_nf_seplains)
 
 #Transform layers to same reference system
-sc_basins_nf_seplains <- basins_nf_seplains %>%
-  st_intersection(sc_state_bounds_geom)
-head(sc_basins_nf_seplains)
+#sc_basins_nf_seplains <- basins_nf_seplains %>%
+  #st_intersection(sc_state_bounds_geom)
+#head(sc_basins_nf_seplains)
+basins_nf_seplains_wgs84 <- basins_nf_seplains %>%
+  st_transform(4326)
 
 sc_basins_wgs84 <- sc_basins_nf_seplains %>%
   st_transform(4326) 
@@ -84,7 +88,9 @@ sc_gages_wgs84 <- sc_gages %>%
 
 sc_stateboundary_wgs84 <- sc_state_bounds_geom %>%
   st_transform(4326) 
+```
 
+``` {r}
 #Adding basemap
 sc_bbox <- sc_state_bounds_geom %>%
   st_buffer(dist = 150000) %>% 
@@ -99,7 +105,7 @@ class(sc_basemap)
 st_crs(sc_basemap)
 
 sc_state_bounds_geom_wsg84 <- sc_state_bounds_geom %>%
-  st_transform(4326)
+ st_transform(4326)
 
 #Plotting with basemap
 pdf(here("outputs", "sc_with_basemap.pdf"), width = 11, height = 8.5)
@@ -110,8 +116,8 @@ dev.off()
 #Creating 1b map
 pdf(here("outputs", "RachelGonsenhauser_A09_Spatial.pdf"), width = 11, height = 8.5) 
   ggmap(sc_basemap) +
+     geom_sf(data = sc_basins_wgs84, alpha = 0.25, inherit.aes = FALSE) +
   geom_sf(data = sc_stateboundary_wgs84, fill = NA, lwd = 1, inherit.aes = FALSE) +
-  geom_sf(data = sc_basins_wgs84, alpha = 0.25, inherit.aes = FALSE) +
   geom_sf(data = sc_gages_wgs84, lwd = 1, inherit.aes = FALSE) +
     labs(x = "longitude", y = "latitude",
        color = "") +
@@ -125,7 +131,7 @@ ggplot() +
     geom_sf(data = sc_basins_wgs84, alpha = 0.25) +
   theme_bw()
 dev.off()
-  ```
+```
 
 2. Create a new map that mixes spatial and tabular data, as in section 3.3 of the spatial lesson. You may use the maps created in the lesson as an example, but your map should contain data other than precipitation days per year. This map should include: 
 
