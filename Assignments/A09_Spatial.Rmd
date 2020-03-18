@@ -63,20 +63,19 @@ sc_state_bounds_geom <- southeast_state_bounds %>%
   filter(NAME == "South Carolina") %>%
   st_geometry()
 
-#Select watersheds that intersect with SC state bounds
-#sc_basins_nf_seplains <- basins_nf_seplains %>%
-  #st_intersection(sc_state_bounds_geom)
-#head(sc_basins_nf_seplains)
-
 #Select gages
 sc_gages <- gages %>%
-  st_intersection(sc_basins_nf_seplains)
+  st_intersection(basins_nf_seplains)
 
 st_crs(sc_state_bounds_geom)
 st_crs(sc_gages)
 st_crs(sc_basins_nf_seplains)
 
 #Transform layers to same reference system
+sc_basins_nf_seplains <- basins_nf_seplains %>%
+  st_intersection(sc_state_bounds_geom)
+head(sc_basins_nf_seplains)
+
 sc_basins_wgs84 <- sc_basins_nf_seplains %>%
   st_transform(4326) 
 
@@ -126,8 +125,7 @@ ggplot() +
     geom_sf(data = sc_basins_wgs84, alpha = 0.25) +
   theme_bw()
 dev.off()
-  
-```
+  ```
 
 2. Create a new map that mixes spatial and tabular data, as in section 3.3 of the spatial lesson. You may use the maps created in the lesson as an example, but your map should contain data other than precipitation days per year. This map should include: 
 
