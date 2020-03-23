@@ -25,7 +25,7 @@ Here are your three options:
 
 1. Reproduce figure 1b from the spatial lesson, found in section 3.2.2. You may choose a state other than North Carolina, but your map should still contain the spatial features contained in figure 1b in the "img" folder. 
 
-``` {r}
+```{r}
 #Loading packages
 library("readr")
 library("dplyr")
@@ -43,7 +43,7 @@ southeast_state_bounds <- st_read(here("data", "spatial_data", "southeast_state_
 my_tabular_data <- read_csv(here("data", "tabular_data", "conterm_climate.txt"))
 ```
 
-``` {r}
+```{r}
 #Checking EPSG source and project code and resetting
 st_crs(basins_nf_seplains)
 st_crs(gages)
@@ -59,7 +59,9 @@ gages_tabular_as_sf <- st_as_sf(gages_tabular, coords = c("LNG_GAGE", "LAT_GAGE"
 class(gages_tabular_as_sf)
 head(gages_tabular_as_sf)
 st_crs(gages_tabular_as_sf)
+```
 
+```{r}
 #Choose state boundary
 sc_state_bounds_geom <- southeast_state_bounds %>%
   filter(NAME == "South Carolina") %>%
@@ -90,7 +92,7 @@ sc_stateboundary_wgs84 <- sc_state_bounds_geom %>%
   st_transform(4326) 
 ```
 
-``` {r}
+```{r}
 #Adding basemap
 sc_bbox <- sc_state_bounds_geom %>%
   st_buffer(dist = 150000) %>% 
