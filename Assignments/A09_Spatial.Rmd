@@ -108,7 +108,9 @@ st_crs(sc_basemap)
 
 sc_state_bounds_geom_wsg84 <- sc_state_bounds_geom %>%
  st_transform(4326)
+```
 
+```{r}
 #Plotting with basemap
 pdf(here("outputs", "sc_with_basemap.pdf"), width = 11, height = 8.5)
 ggmap(sc_basemap) +
