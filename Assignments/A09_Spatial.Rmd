@@ -116,8 +116,8 @@ dev.off()
 #Creating 1b map
 pdf(here("outputs", "RachelGonsenhauser_A09_Spatial.pdf"), width = 11, height = 8.5) 
   ggmap(sc_basemap) +
+     geom_sf(data = sc_stateboundary_wgs84, fill = NA, lwd = 1, inherit.aes = FALSE) +
      geom_sf(data = sc_basins_wgs84, alpha = 0.25, inherit.aes = FALSE) +
-  geom_sf(data = sc_stateboundary_wgs84, fill = NA, lwd = 1, inherit.aes = FALSE) +
   geom_sf(data = sc_gages_wgs84, lwd = 1, inherit.aes = FALSE) +
     labs(x = "longitude", y = "latitude",
        color = "") +
