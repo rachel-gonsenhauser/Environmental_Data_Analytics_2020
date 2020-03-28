@@ -159,7 +159,25 @@ Rivers.and.Lakes <- full_join(Rivers, Lakes)
 
 (You may choose to run a statistical test or add a line of best fit; this is optional but may aid in your interpretations)
 ```{r}
+ggplot(Rivers.and.Lakes, aes(x = Rivers.Assessed.mi2, y = Rivers.Impaired.mi2, 
+                             fill = Rivers.Impaired.percent.TMDL)) +
+  geom_point(shape = 21, size = 2, alpha = 0.8) + 
+  scale_fill_viridis_c(option = "inferno", begin = 0.2, end = 0.9, direction = -1) +
+  geom_label_repel(data = subset(Rivers.and.Lakes , State %in% c("Ohio", "Oregon", "California", "Idaho", "Kansas", "Michigan", "Pennsylvania", "Maine", "North Dakota", "Colorado")), 
+  aes(label = State), nudge_x = -500, nudge_y = 200) +
+  labs(x = expression("River Area Assessed (mi"^"2"*")"),
+   y = expression("River Area Impaired (mi"^"2"*")"), 
+  fill = "% Impaired with TMDL")
 
+ggplot(Rivers.and.Lakes, aes(x = Lakes.Assessed.mi2, y = Lakes.Impaired.mi2,
+                             fill = Lakes.Impaired.percent.TMDL)) +
+  geom_point(shape = 21, size = 2, alpha = 0.8) + 
+  scale_fill_viridis_c(option = "inferno", begin = 0.2, end = 0.9, direction = -1) +
+  geom_label_repel(data = subset(Rivers.and.Lakes, State %in% c("Oklahoma", "Wisconsin", "North Dakota", "Michigan", "Louisiana", "Utah", "New York", "Montana", "Washington", "Tennessee")), 
+  aes(label = State), nudge_x = -500, nudge_y = 200) +
+  labs(x = expression("Lake Area Assessed (mi"^"2"*")"),
+   y = expression("Lake Area Impaired (mi"^"2"*")"), 
+  fill = "% Impaired with TMDL")
 ```
 
 12. Summarize the findings that accompany your graph. You may choose to suggest further research or data collection to help explain the results.
