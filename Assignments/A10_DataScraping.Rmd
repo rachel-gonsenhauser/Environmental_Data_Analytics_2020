@@ -159,6 +159,7 @@ Rivers.and.Lakes <- full_join(Rivers, Lakes)
 
 (You may choose to run a statistical test or add a line of best fit; this is optional but may aid in your interpretations)
 ```{r}
+# Rivers graph (Figure 1)
 ggplot(Rivers.and.Lakes, aes(x = Rivers.Assessed.mi2, y = Rivers.Impaired.mi2, 
                              fill = Rivers.Impaired.percent.TMDL)) +
   geom_point(shape = 21, size = 2, alpha = 0.8) + 
@@ -169,6 +170,11 @@ ggplot(Rivers.and.Lakes, aes(x = Rivers.Assessed.mi2, y = Rivers.Impaired.mi2,
    y = expression("River Area Impaired (mi"^"2"*")"), 
   fill = "% Impaired with TMDL")
 
+# Rivers simple linear regression
+Rivers.regression <- lm(data = Rivers.and.Lakes, Rivers.Impaired.mi2 ~ Rivers.Assessed.mi2 + Rivers.Impaired.percent.TMDL)
+summary(Rivers.regression)
+
+# Lakes graph (Figure 2)
 ggplot(Rivers.and.Lakes, aes(x = Lakes.Assessed.mi2, y = Lakes.Impaired.mi2,
                              fill = Lakes.Impaired.percent.TMDL)) +
   geom_point(shape = 21, size = 2, alpha = 0.8) + 
@@ -178,8 +184,15 @@ ggplot(Rivers.and.Lakes, aes(x = Lakes.Assessed.mi2, y = Lakes.Impaired.mi2,
   labs(x = expression("Lake Area Assessed (mi"^"2"*")"),
    y = expression("Lake Area Impaired (mi"^"2"*")"), 
   fill = "% Impaired with TMDL")
+
+# Lakes simple linear regression
+Lakes.regression <- lm(data = Rivers.and.Lakes, Lakes.Impaired.mi2 ~ Lakes.Assessed.mi2 + Lakes.Impaired.percent.TMDL)
+summary(Lakes.regression)
 ```
 
 12. Summarize the findings that accompany your graph. You may choose to suggest further research or data collection to help explain the results.
 
 >
+  Neither the area of rivers assessed nor the percent of impaired rivers that have all impairments addressed by a TMDL/other restoration plan are significant indicators of the area of rivers impaired (Figure 1; multiple linear regression: R2=0.03118, df=2 and 36, p=0.2137). 
+  Conversely, while the  percent of impaired rivers that have all impairments addressed by a TMDL/other restoration plan is not a significant indicator of the area of rivers impaired, the area of rivers assessed is a significant indicator of the area found to be impaired (Figure 2; multiple linear regression: R2=0.2839, df=2 and 28, p=0.003546).
+  Many states were missing observations for the percent of impaired rivers whose impairments are addressed by a TMDL/other restoration plan, so further data collection in these states is necessary to establish whether a relationship between this variable and others studied.
