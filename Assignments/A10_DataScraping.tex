@@ -1,0 +1,557 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
+\hypersetup{
+            pdftitle={Assignment 10: Data Scraping},
+            pdfauthor={Rachel Gonsenhauser},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{Assignment 10: Data Scraping}
+\author{Rachel Gonsenhauser}
+\date{}
+
+\begin{document}
+\maketitle
+
+\hypertarget{total-points}{%
+\section{Total points:}\label{total-points}}
+
+\hypertarget{overview}{%
+\subsection{OVERVIEW}\label{overview}}
+
+This exercise accompanies the lessons in Environmental Data Analytics on
+time series analysis.
+
+\hypertarget{directions}{%
+\subsection{Directions}\label{directions}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Change ``Student Name'' on line 3 (above) with your name.
+\item
+  Work through the steps, \textbf{creating code and output} that fulfill
+  each instruction.
+\item
+  Be sure to \textbf{answer the questions} in this assignment document.
+\item
+  When you have completed the assignment, \textbf{Knit} the text and
+  code into a single PDF file.
+\item
+  After Knitting, submit the completed exercise (PDF file) to the
+  dropbox in Sakai. Add your last name into the file name (e.g.,
+  ``Salk\_A06\_GLMs\_Week1.Rmd'') prior to submission.
+\end{enumerate}
+
+The completed exercise is due on Tuesday, April 7 at 1:00 pm.
+
+\hypertarget{set-up}{%
+\subsection{Set up}\label{set-up}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Set up your session:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Check your working directory
+\item
+  Load the packages \texttt{tidyverse}, \texttt{rvest}, and any others
+  you end up using.
+\item
+  Set your ggplot theme
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#getwd()}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(viridis)}
+\CommentTok{#install.packages("rvest")}
+\KeywordTok{library}\NormalTok{(rvest)}
+\CommentTok{#install.packages("ggrepel")}
+\KeywordTok{library}\NormalTok{(ggrepel)}
+
+\NormalTok{mytheme <-}\StringTok{ }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{color =} \StringTok{"black"}\NormalTok{), }
+        \DataTypeTok{legend.position =} \StringTok{"top"}\NormalTok{)}
+\KeywordTok{theme_set}\NormalTok{(mytheme)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Indicate the EPA impaired waters website
+  (\url{https://www.epa.gov/nutrient-policy-data/waters-assessed-impaired-due-nutrient-related-causes})
+  as the URL to be scraped.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{url <-}\StringTok{ "https://www.epa.gov/nutrient-policy-data/waters-assessed-impaired-due-nutrient-related-causes"}
+\NormalTok{webpage <-}\StringTok{ }\KeywordTok{read_html}\NormalTok{(url)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Scrape the Rivers table, with every column except year. Then, turn it
+  into a data frame.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{State <-}\StringTok{ }\NormalTok{webpage }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"table:nth-child(8) td:nth-child(1)"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_text}\NormalTok{()}
+\NormalTok{Rivers.Assessed.mi2 <-}\StringTok{ }\NormalTok{webpage }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"table:nth-child(8) td:nth-child(2)"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_text}\NormalTok{()}
+\NormalTok{Rivers.Assessed.percent <-}\StringTok{ }\NormalTok{webpage }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"table:nth-child(8) td:nth-child(3)"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_text}\NormalTok{()}
+\NormalTok{Rivers.Impaired.mi2 <-}\StringTok{ }\NormalTok{webpage }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"table:nth-child(8) td:nth-child(4)"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_text}\NormalTok{()}
+\NormalTok{Rivers.Impaired.percent <-}\StringTok{ }\NormalTok{webpage }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"table:nth-child(8) td:nth-child(5)"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_text}\NormalTok{()}
+\NormalTok{Rivers.Impaired.percent.TMDL <-}\StringTok{ }\NormalTok{webpage }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"table:nth-child(8) td:nth-child(6)"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_text}\NormalTok{()}
+
+\NormalTok{Rivers <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(State, Rivers.Assessed.mi2, Rivers.Assessed.percent, }
+\NormalTok{                          Rivers.Impaired.mi2, Rivers.Impaired.percent, }
+\NormalTok{                          Rivers.Impaired.percent.TMDL)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\item
+  Use \texttt{str\_replace} to remove non-numeric characters from the
+  numeric columns.
+\item
+  Set the numeric columns to a numeric class and verify this using
+  \texttt{str}.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 4}
+\NormalTok{Rivers}\OperatorTok{$}\NormalTok{Rivers.Assessed.mi2 <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Rivers}\OperatorTok{$}\NormalTok{Rivers.Assessed.mi2,}
+                                                      \DataTypeTok{pattern =} \StringTok{"([,])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)  }
+\NormalTok{Rivers}\OperatorTok{$}\NormalTok{Rivers.Assessed.percent <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Rivers}\OperatorTok{$}\NormalTok{Rivers.Assessed.percent,}
+                                                      \DataTypeTok{pattern =} \StringTok{"([%])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)}
+\NormalTok{Rivers}\OperatorTok{$}\NormalTok{Rivers.Assessed.percent <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Rivers}\OperatorTok{$}\NormalTok{Rivers.Assessed.percent,}
+                                                      \DataTypeTok{pattern =} \StringTok{"([*])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)}
+\NormalTok{Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.mi2 <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.mi2,}
+                                                      \DataTypeTok{pattern =} \StringTok{"([,])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)  }
+\NormalTok{Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.percent <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.percent, }
+                                                  \DataTypeTok{pattern =} \StringTok{"([%])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)}
+\NormalTok{Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.percent.TMDL <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.percent.TMDL, }
+                                                       \DataTypeTok{pattern =} \StringTok{"([%])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)}
+\NormalTok{Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.percent.TMDL <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.percent.TMDL, }
+                                                       \DataTypeTok{pattern =} \StringTok{"([±])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)}
+
+\CommentTok{# 5}
+\KeywordTok{str}\NormalTok{(Rivers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    50 obs. of  6 variables:
+##  $ State                       : Factor w/ 50 levels "Alabama","Alaska",..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ Rivers.Assessed.mi2         : chr  "10538" "602" "2764" "9979" ...
+##  $ Rivers.Assessed.percent     : chr  "14" "0" "3" "11" ...
+##  $ Rivers.Impaired.mi2         : chr  "1146" "15" "144" "1440" ...
+##  $ Rivers.Impaired.percent     : chr  "11" "2" "5" "14" ...
+##  $ Rivers.Impaired.percent.TMDL: chr  "53" "100" "6" "2" ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Rivers}\OperatorTok{$}\NormalTok{Rivers.Assessed.mi2 <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Rivers}\OperatorTok{$}\NormalTok{Rivers.Assessed.mi2)}
+\NormalTok{Rivers}\OperatorTok{$}\NormalTok{Rivers.Assessed.percent <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Rivers}\OperatorTok{$}\NormalTok{Rivers.Assessed.percent)}
+\NormalTok{Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.mi2 <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.mi2)}
+\NormalTok{Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.percent <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.percent)}
+\NormalTok{Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.percent.TMDL <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Rivers}\OperatorTok{$}\NormalTok{Rivers.Impaired.percent.TMDL)}
+\KeywordTok{str}\NormalTok{(Rivers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    50 obs. of  6 variables:
+##  $ State                       : Factor w/ 50 levels "Alabama","Alaska",..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ Rivers.Assessed.mi2         : num  10538 602 2764 9979 32803 ...
+##  $ Rivers.Assessed.percent     : num  14 0 3 11 16 56 41 100 20 19 ...
+##  $ Rivers.Impaired.mi2         : num  1146 15 144 1440 13350 ...
+##  $ Rivers.Impaired.percent     : num  11 2 5 14 41 0 0 88 53 9 ...
+##  $ Rivers.Impaired.percent.TMDL: num  53 100 6 2 NA 14 73 37 NA 78 ...
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Scrape the Lakes table, with every column except year. Then, turn it
+  into a data frame.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{State <-}\StringTok{ }\NormalTok{webpage }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"table:nth-child(14) td:nth-child(1)"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_text}\NormalTok{()}
+\NormalTok{Lakes.Assessed.mi2 <-}\StringTok{ }\NormalTok{webpage }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"table:nth-child(14) td:nth-child(2)"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_text}\NormalTok{()}
+\NormalTok{Lakes.Assessed.percent <-}\StringTok{ }\NormalTok{webpage }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"table:nth-child(14) td:nth-child(3)"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_text}\NormalTok{()}
+\NormalTok{Lakes.Impaired.mi2 <-}\StringTok{ }\NormalTok{webpage }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"table:nth-child(14) td:nth-child(4)"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_text}\NormalTok{()}
+\NormalTok{Lakes.Impaired.percent <-}\StringTok{ }\NormalTok{webpage }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"table:nth-child(14) td:nth-child(5)"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_text}\NormalTok{()}
+\NormalTok{Lakes.Impaired.percent.TMDL <-}\StringTok{ }\NormalTok{webpage }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_nodes}\NormalTok{(}\StringTok{"table:nth-child(14) td:nth-child(6)"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{html_text}\NormalTok{()}
+
+\NormalTok{Lakes <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(State, Lakes.Assessed.mi2, Lakes.Assessed.percent, }
+\NormalTok{                          Lakes.Impaired.mi2, Lakes.Impaired.percent, }
+\NormalTok{                          Lakes.Impaired.percent.TMDL)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{6}
+\item
+  Filter out the states with no data.
+\item
+  Use \texttt{str\_replace} to remove non-numeric characters from the
+  numeric columns.
+\item
+  Set the numeric columns to a numeric class and verify this using
+  \texttt{str}.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 7}
+\NormalTok{Lakes <-}\StringTok{ }\NormalTok{Lakes }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(State }\OperatorTok{!=}\StringTok{ "Hawaii"} \OperatorTok{&}\StringTok{ }\NormalTok{State }\OperatorTok{!=}\StringTok{ "Pennsylvania"}\NormalTok{)}
+
+\CommentTok{# 8}
+\NormalTok{Lakes}\OperatorTok{$}\NormalTok{Lakes.Assessed.mi2 <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Lakes}\OperatorTok{$}\NormalTok{Lakes.Assessed.mi2,}
+                                                      \DataTypeTok{pattern =} \StringTok{"([,])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)  }
+\NormalTok{Lakes}\OperatorTok{$}\NormalTok{Lakes.Assessed.percent <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Lakes}\OperatorTok{$}\NormalTok{Lakes.Assessed.percent,}
+                                                      \DataTypeTok{pattern =} \StringTok{"([%])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)}
+\NormalTok{Lakes}\OperatorTok{$}\NormalTok{Lakes.Assessed.percent <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Lakes}\OperatorTok{$}\NormalTok{Lakes.Assessed.percent,}
+                                                      \DataTypeTok{pattern =} \StringTok{"([*])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)}
+\NormalTok{Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.mi2 <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.mi2,}
+                                                      \DataTypeTok{pattern =} \StringTok{"([,])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)  }
+\NormalTok{Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.percent <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.percent, }
+                                                  \DataTypeTok{pattern =} \StringTok{"([%])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)}
+\NormalTok{Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.percent.TMDL <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.percent.TMDL, }
+                                                       \DataTypeTok{pattern =} \StringTok{"([%])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)}
+\NormalTok{Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.percent.TMDL <-}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.percent.TMDL, }
+                                                       \DataTypeTok{pattern =} \StringTok{"([±])"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)}
+
+\CommentTok{# 9}
+\KeywordTok{str}\NormalTok{(Lakes)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    48 obs. of  6 variables:
+##  $ State                      : Factor w/ 50 levels "Alabama","Alaska",..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ Lakes.Assessed.mi2         : chr  "430.976" "5981" "114976" "64778" ...
+##  $ Lakes.Assessed.percent     : chr  "88" "0" "34" "13" ...
+##  $ Lakes.Impaired.mi2         : chr  "81740" "1137" "4895" "6513" ...
+##  $ Lakes.Impaired.percent     : chr  "19" "19" "4" "10" ...
+##  $ Lakes.Impaired.percent.TMDL: chr  "53" "73" "9" "71" ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Lakes}\OperatorTok{$}\NormalTok{Lakes.Assessed.mi2 <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Lakes}\OperatorTok{$}\NormalTok{Lakes.Assessed.mi2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: NAs introduced by coercion
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Lakes}\OperatorTok{$}\NormalTok{Lakes.Assessed.percent <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Lakes}\OperatorTok{$}\NormalTok{Lakes.Assessed.percent)}
+\NormalTok{Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.mi2 <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.mi2)}
+\NormalTok{Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.percent <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.percent)}
+\NormalTok{Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.percent.TMDL <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Lakes}\OperatorTok{$}\NormalTok{Lakes.Impaired.percent.TMDL)}
+\KeywordTok{str}\NormalTok{(Lakes)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    48 obs. of  6 variables:
+##  $ State                      : Factor w/ 50 levels "Alabama","Alaska",..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ Lakes.Assessed.mi2         : num  431 5981 114976 64778 NA ...
+##  $ Lakes.Assessed.percent     : num  88 0 34 13 50 95 47 100 54 82 ...
+##  $ Lakes.Impaired.mi2         : num  81740 1137 4895 6513 473954 ...
+##  $ Lakes.Impaired.percent     : num  19 19 4 10 45 7 12 88 82 2 ...
+##  $ Lakes.Impaired.percent.TMDL: num  53 73 9 71 NA 0 7 69 NA 20 ...
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{9}
+\tightlist
+\item
+  Join the two data frames with a \texttt{full\_join}.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Rivers.and.Lakes <-}\StringTok{ }\KeywordTok{full_join}\NormalTok{(Rivers, Lakes)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = "State"
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{10}
+\tightlist
+\item
+  Create one graph that compares the data for lakes and/or rivers. This
+  option is flexible; choose a relationship (or relationships) that seem
+  interesting to you, and think about the implications of your findings.
+  This graph should be edited so it follows best data visualization
+  practices.
+\end{enumerate}
+
+(You may choose to run a statistical test or add a line of best fit;
+this is optional but may aid in your interpretations)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Rivers graph (Figure 1)}
+\KeywordTok{ggplot}\NormalTok{(Rivers.and.Lakes, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Rivers.Assessed.mi2, }\DataTypeTok{y =}\NormalTok{ Rivers.Impaired.mi2, }
+                             \DataTypeTok{fill =}\NormalTok{ Rivers.Impaired.percent.TMDL)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{shape =} \DecValTok{21}\NormalTok{, }\DataTypeTok{size =} \DecValTok{2}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.8}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_fill_viridis_c}\NormalTok{(}\DataTypeTok{option =} \StringTok{"inferno"}\NormalTok{, }\DataTypeTok{begin =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{end =} \FloatTok{0.9}\NormalTok{, }\DataTypeTok{direction =} \DecValTok{-1}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_label_repel}\NormalTok{(}\DataTypeTok{data =} \KeywordTok{subset}\NormalTok{(Rivers.and.Lakes , State }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Ohio"}\NormalTok{, }\StringTok{"Oregon"}\NormalTok{, }\StringTok{"California"}\NormalTok{, }\StringTok{"Idaho"}\NormalTok{, }\StringTok{"Kansas"}\NormalTok{, }\StringTok{"Michigan"}\NormalTok{, }\StringTok{"Pennsylvania"}\NormalTok{, }\StringTok{"Maine"}\NormalTok{, }\StringTok{"North Dakota"}\NormalTok{, }\StringTok{"Colorado"}\NormalTok{)), }
+  \KeywordTok{aes}\NormalTok{(}\DataTypeTok{label =}\NormalTok{ State), }\DataTypeTok{nudge_x =} \DecValTok{-500}\NormalTok{, }\DataTypeTok{nudge_y =} \DecValTok{200}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{expression}\NormalTok{(}\StringTok{"River Area Assessed (mi"}\OperatorTok{^}\StringTok{"2"}\OperatorTok{*}\StringTok{")"}\NormalTok{),}
+   \DataTypeTok{y =} \KeywordTok{expression}\NormalTok{(}\StringTok{"River Area Impaired (mi"}\OperatorTok{^}\StringTok{"2"}\OperatorTok{*}\StringTok{")"}\NormalTok{), }
+  \DataTypeTok{fill =} \StringTok{"% Impaired with TMDL"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{A10_DataScraping_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Rivers simple linear regression}
+\NormalTok{Rivers.regression <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ Rivers.and.Lakes, Rivers.Impaired.mi2 }\OperatorTok{~}\StringTok{ }\NormalTok{Rivers.Assessed.mi2 }\OperatorTok{+}\StringTok{ }\NormalTok{Rivers.Impaired.percent.TMDL)}
+\KeywordTok{summary}\NormalTok{(Rivers.regression)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Rivers.Impaired.mi2 ~ Rivers.Assessed.mi2 + Rivers.Impaired.percent.TMDL, 
+##     data = Rivers.and.Lakes)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2585.2 -1191.8  -422.8   215.4  6025.8 
+## 
+## Coefficients:
+##                                Estimate Std. Error t value Pr(>|t|)  
+## (Intercept)                  1389.78579  525.77907   2.643   0.0121 *
+## Rivers.Assessed.mi2             0.02586    0.01529   1.691   0.0994 .
+## Rivers.Impaired.percent.TMDL   -4.69516   12.11993  -0.387   0.7007  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2048 on 36 degrees of freedom
+##   (11 observations deleted due to missingness)
+## Multiple R-squared:  0.08217,    Adjusted R-squared:  0.03118 
+## F-statistic: 1.611 on 2 and 36 DF,  p-value: 0.2137
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Lakes graph (Figure 2)}
+\KeywordTok{ggplot}\NormalTok{(Rivers.and.Lakes, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Lakes.Assessed.mi2, }\DataTypeTok{y =}\NormalTok{ Lakes.Impaired.mi2,}
+                             \DataTypeTok{fill =}\NormalTok{ Lakes.Impaired.percent.TMDL)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{shape =} \DecValTok{21}\NormalTok{, }\DataTypeTok{size =} \DecValTok{2}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.8}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_fill_viridis_c}\NormalTok{(}\DataTypeTok{option =} \StringTok{"inferno"}\NormalTok{, }\DataTypeTok{begin =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{end =} \FloatTok{0.9}\NormalTok{, }\DataTypeTok{direction =} \DecValTok{-1}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_label_repel}\NormalTok{(}\DataTypeTok{data =} \KeywordTok{subset}\NormalTok{(Rivers.and.Lakes, State }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Oklahoma"}\NormalTok{, }\StringTok{"Wisconsin"}\NormalTok{, }\StringTok{"North Dakota"}\NormalTok{, }\StringTok{"Michigan"}\NormalTok{, }\StringTok{"Louisiana"}\NormalTok{, }\StringTok{"Utah"}\NormalTok{, }\StringTok{"New York"}\NormalTok{, }\StringTok{"Montana"}\NormalTok{, }\StringTok{"Washington"}\NormalTok{, }\StringTok{"Tennessee"}\NormalTok{)), }
+  \KeywordTok{aes}\NormalTok{(}\DataTypeTok{label =}\NormalTok{ State), }\DataTypeTok{nudge_x =} \DecValTok{-500}\NormalTok{, }\DataTypeTok{nudge_y =} \DecValTok{200}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{expression}\NormalTok{(}\StringTok{"Lake Area Assessed (mi"}\OperatorTok{^}\StringTok{"2"}\OperatorTok{*}\StringTok{")"}\NormalTok{),}
+   \DataTypeTok{y =} \KeywordTok{expression}\NormalTok{(}\StringTok{"Lake Area Impaired (mi"}\OperatorTok{^}\StringTok{"2"}\OperatorTok{*}\StringTok{")"}\NormalTok{), }
+  \DataTypeTok{fill =} \StringTok{"% Impaired with TMDL"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 7 rows containing missing values (geom_point).
+\end{verbatim}
+
+\includegraphics{A10_DataScraping_files/figure-latex/unnamed-chunk-8-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Lakes simple linear regression}
+\NormalTok{Lakes.regression <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ Rivers.and.Lakes, Lakes.Impaired.mi2 }\OperatorTok{~}\StringTok{ }\NormalTok{Lakes.Assessed.mi2 }\OperatorTok{+}\StringTok{ }\NormalTok{Lakes.Impaired.percent.TMDL)}
+\KeywordTok{summary}\NormalTok{(Lakes.regression)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Lakes.Impaired.mi2 ~ Lakes.Assessed.mi2 + Lakes.Impaired.percent.TMDL, 
+##     data = Rivers.and.Lakes)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -145661  -30230  -12077   18536  112022 
+## 
+## Coefficients:
+##                              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)                 8.589e+03  1.708e+04   0.503 0.619071    
+## Lakes.Assessed.mi2          1.630e-01  4.388e-02   3.715 0.000898 ***
+## Lakes.Impaired.percent.TMDL 3.208e+02  3.558e+02   0.902 0.374866    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 57890 on 28 degrees of freedom
+##   (19 observations deleted due to missingness)
+## Multiple R-squared:  0.3317, Adjusted R-squared:  0.2839 
+## F-statistic: 6.948 on 2 and 28 DF,  p-value: 0.003546
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{11}
+\tightlist
+\item
+  Summarize the findings that accompany your graph. You may choose to
+  suggest further research or data collection to help explain the
+  results.
+\end{enumerate}
+
+\begin{quote}
+Neither the area of rivers assessed nor the percent of impaired rivers
+that have all impairments addressed by a TMDL/other restoration plan are
+significant indicators of the area of rivers impaired (Figure 1;
+multiple linear regression: R2=0.03118, df=2 and 36, p=0.2137).
+Conversely, while the percent of impaired rivers that have all
+impairments addressed by a TMDL/other restoration plan is not a
+significant indicator of the area of rivers impaired, the area of rivers
+assessed is a significant indicator of the area found to be impaired
+(Figure 2; multiple linear regression: R2=0.2839, df=2 and 28,
+p=0.003546). Many states were missing observations for the percent of
+impaired rivers or lakes whose impairments are addressed by a TMDL/other
+restoration plan, so further data collection in these states is
+necessary to establish whether a relationship between this variable and
+others studied exists.
+\end{quote}
+
+\end{document}
