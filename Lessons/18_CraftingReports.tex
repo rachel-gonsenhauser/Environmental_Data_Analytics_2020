@@ -221,19 +221,31 @@ make a table in Rmd)
 
 \begin{longtable}[]{@{}ll@{}}
 \toprule
-\textbf{Dataset name} & \textbf{Dataset information}\tabularnewline
+\begin{minipage}[b]{0.42\columnwidth}\raggedright
+Dataset Name\strut
+\end{minipage} & \begin{minipage}[b]{0.52\columnwidth}\raggedright
+Relevant Dataset Information\strut
+\end{minipage}\tabularnewline
 \midrule
 \endhead
-EPAAir\_O3\_NC2018\_raw.csv & Information about ozone\tabularnewline
-NEON\_NIWO\_Litter\_trapdata\_raw.csv & Information about
-litter\tabularnewline
+\begin{minipage}[t]{0.42\columnwidth}\raggedright
+EPA Air pollutants measurement\strut
+\end{minipage} & \begin{minipage}[t]{0.52\columnwidth}\raggedright
+Provides measurements in Ozone and PM\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.42\columnwidth}\raggedright
+EXOTOX\strut
+\end{minipage} & \begin{minipage}[t]{0.52\columnwidth}\raggedright
+Provides data from studies on several neonicotinoids and their effects
+on mortality of various organisms\strut
+\end{minipage}\tabularnewline
 \bottomrule
 \end{longtable}
 
 \begin{itemize}
 \tightlist
 \item
-  Kateri prefers to use the cable function to make tables, this is
+  Kateri prefers to use the kable function to make tables, this is
   sometimes glitchy
 \end{itemize}
 
@@ -246,12 +258,6 @@ litter\tabularnewline
 Create an R chunk below that installs the package \texttt{knitr}.
 Instead of commenting out the code, customize the chunk options such
 that the code is not evaluated (i.e., not run).
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{install.packages}\NormalTok{(}\StringTok{"knitr"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
 \hypertarget{setup}{%
 \subsubsection{Setup}\label{setup}}
@@ -341,6 +347,12 @@ operations:
 \StringTok{  }\NormalTok{Nutrients.raw }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{select}\NormalTok{(lakename}\OperatorTok{:}\NormalTok{sampledate, depth}\OperatorTok{:}\NormalTok{po4) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{filter}\NormalTok{(depth }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{)}
+
+\CommentTok{#could also code like this to exlucde rows we don't want}
+\CommentTok{#Nutrients.processed <- }
+  \CommentTok{#Nutrients.raw %>%}
+  \CommentTok{#select(-lakeid,-depth_id,-comments) %>%}
+  \CommentTok{#filter(depth == 0)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -350,6 +362,28 @@ concentrations for each lake. Create a second summary dataset that is
 identical except that it evaluates total phosphorus. Customize the chunk
 options such that the code is run but not displayed in the final
 document.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Nitrogen.summary <-}\StringTok{ }
+\StringTok{  }\NormalTok{Nutrients.processed }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{drop_na}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(lakename) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{meanTN =} \KeywordTok{mean}\NormalTok{(tn_ug), }
+            \DataTypeTok{minTN =} \KeywordTok{min}\NormalTok{(tn_ug), }
+            \DataTypeTok{maxTN =} \KeywordTok{max}\NormalTok{(tn_ug), }
+            \DataTypeTok{sdTN =} \KeywordTok{sd}\NormalTok{(tn_ug))}
+
+\NormalTok{Phosphorous.summary <-}\StringTok{ }
+\StringTok{  }\NormalTok{Nutrients.processed }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{drop_na}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(lakename) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{meanTP =} \KeywordTok{mean}\NormalTok{(tp_ug), }
+            \DataTypeTok{minTP =} \KeywordTok{min}\NormalTok{(tp_ug), }
+            \DataTypeTok{maxTP =} \KeywordTok{max}\NormalTok{(tp_ug), }
+            \DataTypeTok{sdTP =} \KeywordTok{sd}\NormalTok{(tp_ug))}
+\end{Highlighting}
+\end{Shaded}
 
 Create a third R chunk that uses the function \texttt{kable} in the
 knitr package to display two tables: one for the summary dataframe for
@@ -376,7 +410,8 @@ What are the chunk options that will suppress the display of errors,
 warnings, and messages in the final document?
 
 \begin{quote}
-ANSWER:
+ANSWER: * suppress display of warnings - warnings=FALSE * suppress
+display of messages - messages=FALSE
 \end{quote}
 
 \hypertarget{communicating-results}{%
@@ -389,6 +424,22 @@ below the paragraph. Below the horizontal rule, write another paragraph
 describing the next steps you might take in analyzing this dataset. What
 questions might you be able to answer, and what analyses would you
 conduct to answer those questions?
+
+\hypertarget{total-phosphorous-concentrations-experience-a-peak-between-1996-and-1997-where-east-long-lake-has-the-highest-concentrations-among-lakes-compared.-total-nitrogen-also-peaks-around-this-same-time-with-east-and-west-long-lakes-experiencing-the-highest-concentrations.}{%
+\subsection{Total phosphorous concentrations experience a peak between
+1996 and 1997, where East Long Lake has the highest concentrations among
+lakes compared. Total nitrogen also peaks around this same time, with
+East and West Long Lakes experiencing the highest
+concentrations.}\label{total-phosphorous-concentrations-experience-a-peak-between-1996-and-1997-where-east-long-lake-has-the-highest-concentrations-among-lakes-compared.-total-nitrogen-also-peaks-around-this-same-time-with-east-and-west-long-lakes-experiencing-the-highest-concentrations.}}
+
+Next steps for research might include gathering more data for other
+contaminants included in the dataset (such as NH3\^{}4, NO2\^{}3, and
+PO4). These variables have a lot of missing data, so gathering more data
+would allow us to compare concentrations of total nitrogen and
+phosphorous to the occurrence of these other chemical constituents. To
+analyze these occurrences, a multiple linear regression could be used to
+see if total nitrogen or phosphorous are predictors for the occurrence
+of other compounds, or vice versa.
 
 \hypertarget{knit-your-pdf}{%
 \subsection{KNIT YOUR PDF}\label{knit-your-pdf}}
