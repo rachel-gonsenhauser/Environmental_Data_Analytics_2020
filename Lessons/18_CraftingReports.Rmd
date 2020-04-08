@@ -146,22 +146,23 @@ kable(Phosphorous.summary, caption = "Total Phosporous conentrations per Lake")
 
 Create a fourth and fifth R chunk that generates two plots (one in each chunk): one for total N over time with different colors for each lake, and one with the same setup but for total P. Decide which geom option will be appropriate for your purpose, and select a color palette that is visually pleasing and accessible. Customize the chunk options such that the final figures are displayed but not the code used to generate the figures. In addition, customize the chunk options such that the figures are aligned on the left side of the page. Lastly, add a fig.cap chunk option to add a caption (title) to your plot that will display underneath the figure.
 
-```{r, include=FALSE, fig.height = 4, fig.width = 10, fig.cap="Total nitrogen over time"}
+```{r, fig.height = 4, fig.width = 10, fig.cap="Total nitrogen over time"}
 library(scales)
 ggplot(Nutrients.processed, aes(x = as.POSIXct(sampledate), y = tn_ug, color = lakename)) +
   geom_point() +
   scale_color_brewer(palette="Dark2") +
   xlab("Date (year)") +
-  ylab("Total Nitrogen (\U003BCg/L)") +
+  ylab("Total Nitrogen (ug/L)") +
   scale_x_datetime(date_breaks = "1 year", labels = date_format("%Y"))
 ```
 
-```{r, include=FALSE, fig.height = 4, fig.width = 10, fig.cap="Total phosphorous over time"}
+```{r, fig.height = 4, fig.width = 10, fig.cap="Total phosphorous over time"}
+library(scales)
 ggplot(Nutrients.processed, aes(x = as.POSIXct(sampledate), y = tp_ug, color = lakename)) +
   geom_point() +
   scale_color_brewer(palette="Accent") +
   xlab("Date (year)") +
-  ylab("Total Phosphorous (\U003BCg/L)") +
+  ylab("Total Phosphorous (ug/L)") +
   scale_x_datetime(date_breaks = "1 year", labels = date_format("%Y"))
 ```
 ### Other options

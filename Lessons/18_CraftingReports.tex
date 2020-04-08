@@ -403,11 +403,69 @@ are aligned on the left side of the page. Lastly, add a fig.cap chunk
 option to add a caption (title) to your plot that will display
 underneath the figure.
 
-\hypertarget{other-options}{%
-\subsubsection{Other options}\label{other-options}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(scales)}
+\end{Highlighting}
+\end{Shaded}
 
-What are the chunk options that will suppress the display of errors,
-warnings, and messages in the final document?
+\begin{verbatim}
+## 
+## Attaching package: 'scales'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:purrr':
+## 
+##     discard
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:readr':
+## 
+##     col_factor
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(Nutrients.processed, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{as.POSIXct}\NormalTok{(sampledate), }\DataTypeTok{y =}\NormalTok{ tn_ug, }\DataTypeTok{color =}\NormalTok{ lakename)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_color_brewer}\NormalTok{(}\DataTypeTok{palette=}\StringTok{"Dark2"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Date (year)"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Total Nitrogen (ug/L)"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_x_datetime}\NormalTok{(}\DataTypeTok{date_breaks =} \StringTok{"1 year"}\NormalTok{, }\DataTypeTok{labels =} \KeywordTok{date_format}\NormalTok{(}\StringTok{"%Y"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 139 rows containing missing values (geom_point).
+\end{verbatim}
+
+\begin{figure}
+\centering
+\includegraphics{18_CraftingReports_files/figure-latex/unnamed-chunk-6-1.pdf}
+\caption{Total nitrogen over time}
+\end{figure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(scales)}
+\KeywordTok{ggplot}\NormalTok{(Nutrients.processed, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{as.POSIXct}\NormalTok{(sampledate), }\DataTypeTok{y =}\NormalTok{ tp_ug, }\DataTypeTok{color =}\NormalTok{ lakename)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_color_brewer}\NormalTok{(}\DataTypeTok{palette=}\StringTok{"Accent"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Date (year)"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Total Phosphorous (ug/L)"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_x_datetime}\NormalTok{(}\DataTypeTok{date_breaks =} \StringTok{"1 year"}\NormalTok{, }\DataTypeTok{labels =} \KeywordTok{date_format}\NormalTok{(}\StringTok{"%Y"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 7 rows containing missing values (geom_point).
+\end{verbatim}
+
+\includegraphics{18_CraftingReports_files/figure-latex/unnamed-chunk-7-1.pdf}
+\#\#\# Other options What are the chunk options that will suppress the
+display of errors, warnings, and messages in the final document?
 
 \begin{quote}
 ANSWER: * suppress display of warnings - warnings=FALSE * suppress
