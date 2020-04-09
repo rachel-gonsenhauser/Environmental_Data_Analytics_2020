@@ -11,7 +11,7 @@ nutrient_data <- nutrient_data %>%
   select(lakename, sampledate:po4)
 
 #### Define UI ----
-ui <- fluidPage(theme = shinytheme("yeti"),
+ui <- fluidPage(theme = shinytheme("superhero"),
   titlePanel("Nutrients in Peter Lake and Paul Lake"),
   sidebarLayout(
     sidebarPanel(
@@ -44,6 +44,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
     # Output
     mainPanel(
       plotOutput("scatterplot", brush = brushOpts(id = "scatterplot_brush")), 
+      # brush allows you to select part of the scatterplot and autopopulates a table with data from that area of the plot
       tableOutput("mytable")
     )))
 

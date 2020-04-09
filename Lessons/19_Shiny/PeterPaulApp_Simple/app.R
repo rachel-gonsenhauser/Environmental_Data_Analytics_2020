@@ -10,6 +10,7 @@ nutrient_data <- nutrient_data %>%
   select(lakename, sampledate:po4)
 
 #### Define UI ----
+# Fluid page means that if you change the dimensions of your window, things will adjust to the dimensions of your actual webpage
 ui <- fluidPage(
   titlePanel("Nutrients in Peter Lake and Paul Lake"),
   sidebarLayout(
