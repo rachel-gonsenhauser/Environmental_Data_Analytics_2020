@@ -148,7 +148,7 @@ Create a fourth and fifth R chunk that generates two plots (one in each chunk): 
 
 ```{r, fig.height = 4, fig.width = 10, fig.cap="Total nitrogen over time"}
 library(scales)
-ggplot(Nutrients.processed, aes(x = as.POSIXct(sampledate), y = tn_ug, color = lakename)) +
+  ggplot(Nutrients.processed, aes(x = as.POSIXct(sampledate), y = tn_ug, color = lakename)) +
   geom_point() +
   scale_color_brewer(palette="Dark2") +
   xlab("Date (year)") +
@@ -156,13 +156,13 @@ ggplot(Nutrients.processed, aes(x = as.POSIXct(sampledate), y = tn_ug, color = l
   scale_x_datetime(date_breaks = "1 year", labels = date_format("%Y"))
 ```
 
-```{r, fig.height = 4, fig.width = 10, fig.cap="Total phosphorous over time"}
+```{r, fig.height = 4, fig.width = 10, fig.cap="Total phosphorus over time"}
 library(scales)
 ggplot(Nutrients.processed, aes(x = as.POSIXct(sampledate), y = tp_ug, color = lakename)) +
   geom_point() +
   scale_color_brewer(palette="Accent") +
   xlab("Date (year)") +
-  ylab("Total Phosphorous (ug/L)") +
+  ylab("Total Phosphorus (ug/L)") +
   scale_x_datetime(date_breaks = "1 year", labels = date_format("%Y"))
 ```
 ### Other options
