@@ -441,8 +441,11 @@ underneath the figure.
 ## Warning: Removed 139 rows containing missing values (geom_point).
 \end{verbatim}
 
-\includegraphics{18_CraftingReports_files/figure-latex/Figure 1-1.pdf}
-hello
+\begin{figure}
+\centering
+\includegraphics{18_CraftingReports_files/figure-latex/unnamed-chunk-6-1.pdf}
+\caption{Total nitrogen over time}
+\end{figure}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -451,7 +454,7 @@ hello
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_color_brewer}\NormalTok{(}\DataTypeTok{palette=}\StringTok{"Accent"}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Date (year)"}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Total Phosphorous (ug/L)"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Total Phosphorus (ug/L)"}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_x_datetime}\NormalTok{(}\DataTypeTok{date_breaks =} \StringTok{"1 year"}\NormalTok{, }\DataTypeTok{labels =} \KeywordTok{date_format}\NormalTok{(}\StringTok{"%Y"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
@@ -460,7 +463,7 @@ hello
 ## Warning: Removed 7 rows containing missing values (geom_point).
 \end{verbatim}
 
-\includegraphics{18_CraftingReports_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{18_CraftingReports_files/figure-latex/unnamed-chunk-7-1.pdf}
 \#\#\# Other options What are the chunk options that will suppress the
 display of errors, warnings, and messages in the final document?
 
