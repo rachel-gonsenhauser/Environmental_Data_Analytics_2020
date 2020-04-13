@@ -1,4 +1,3 @@
-
 ---
 title: "17: Crafting Reports"
 author: "Environmental Data Analytics | Kateri Salk"
@@ -24,39 +23,27 @@ editor_options:
     + Can be named {r name} to facilitate navigation and autoreferencing
     + Chunk options allow for flexibility when the code runs and when the document is knitted
 3. **Text** with formatting options for readability in knitted document
-
 A handy cheat sheet for R markdown can be found [here](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf). Another one can be found [here](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf).
-
 ## WHY R MARKDOWN?
-
 <Fill in our discussion below with bullet points. Use italics and bold for emphasis (hint: use the cheat sheets to figure out how to make bold and italic text).>
-
 ## TEXT EDITING CHALLENGE
-
 Create a table below that details the example datasets we have been using in class. The first column should contain the names of the datasets and the second column should include some relevant information about the datasets. (Hint: use the cheat sheets to figure out how to make a table in Rmd)
-
 Dataset Name                   | Relevant Dataset Information
 -------------------------------|--------------------------------------
 EPA Air pollutants measurement | Provides measurements in Ozone and PM
 EXOTOX                         | Provides data from studies on several neonicotinoids and their effects on mortality of various organisms
-
 ## R CHUNK EDITING CHALLENGE
 ### Installing packages
 Create an R chunk below that installs the package `knitr`. Instead of commenting out the code, customize the chunk options such that the code is not evaluated (i.e., not run). 
-
 ```{r, eval=FALSE, include=FALSE}
 install.packages("knitr")
 library(knitr)
 # eval - False makes sure the line of code is not run and include = false that it is not displayed in the Knitted document
 ```
-
 ### Setup
 Create an R chunk below called "setup" that checks your working directory, loads the packages `tidyverse` and `knitr`, and sets a ggplot theme. Remember that you need to disable R throwing a message, which containts a check mark that cannot be knitted.
-
 Load the NTL-LTER_Lake_Nutrients_Raw dataset, display the head of the dataset, and set the date column to a date format.
-
 Customize the chunk options such that the code is run but is not displayed in the final document.
-
 ```{r setup, include=FALSE}
 getwd()
 library(tidyverse)
@@ -72,7 +59,6 @@ color = "black", face = "bold"),
         legend.text = element_text(color = "grey40"))
 #setting it as my default theme
 theme_set(NK.theme)
-
 Nutrients_data <- read.csv("./Data/Raw/NTL-LTER_Lake_Nutrients_Raw.csv")
 head(Nutrients_data)
 Nutrients_data$sampledate <- as.Date(Nutrients_data$sampledate,
@@ -100,7 +86,6 @@ Nutrients_summary.tn <- NUtrients_data_processed %>%
             minimum.tn_ug = min(tn_ug, na.rm = TRUE),
             maximum.tn_ug = max(tn_ug, na.rm = TRUE),
             Standard.dev.tn_ug = sd(tn_ug, na.rm = TRUE))
-
 Nutrients_summary.tp <- NUtrients_data_processed %>%
    group_by(lakename) %>%
   summarise(mean.tp_ug = mean(tp_ug, na.rm = TRUE),
@@ -118,22 +103,22 @@ kable(Nutrients_summary.tp, caption = "Total Phosporous conentrations per Lake")
 
 Create a fourth and fifth R chunk that generates two plots (one in each chunk): one for total N over time with different colors for each lake, and one with the same setup but for total P. Decide which geom option will be appropriate for your purpose, and select a color palette that is visually pleasing and accessible. Customize the chunk options such that the final figures are displayed but not the code used to generate the figures. In addition, customize the chunk options such that the figures are aligned on the left side of the page. Lastly, add a fig.cap chunk option to add a caption (title) to your plot that will display underneath the figure.
 
-```{r, include=FALSE, fig.height = 4, fig.width = 10}
+```{r, figs, echo=FALSE, fig.height = 4, fig.width = 10, fig.cap="\\label{fig:figs}Total phosphorus over time"}
 library(scales)
 ggplot(NUtrients_data_processed, aes(x = as.POSIXct(sampledate), y = tn_ug, color = lakename)) +
   geom_point() +
   scale_color_brewer(palette="Dark2") +
   xlab("Date (year)") +
-  ylab("Total Nitrogen (\U003BCg/L)") +
+  ylab("Total Nitrogen (ug/L)") +
   scale_x_datetime(date_breaks = "1 year", labels = date_format("%Y"))
 ```
 
-```{r, include=FALSE, fig.height = 4, fig.width = 10}
+```{r, figs, echo=FALSE, fig.height = 4, fig.width = 10, fig.cap="\\label{fig:figs}Total nitrogen over time"}
 ggplot(NUtrients_data_processed, aes(x = as.POSIXct(sampledate), y = tp_ug, color = lakename)) +
   geom_point() +
   scale_color_brewer(palette="Accent") +
   xlab("Date (year)") +
-  ylab("Total Nitrogen (\U003BCg/L)") +
+  ylab("Total Nitrogen (ug/L)") +
   scale_x_datetime(date_breaks = "1 year", labels = date_format("%Y"))
 ```
 
@@ -143,7 +128,6 @@ What are the chunk options that will suppress the display of errors, warnings, a
 > ANSWER: 
 * suppress display of warnings - warnings=FALSE
 * suppress display of messages - messages=FALSE
-
 ### Communicating results
 Write a paragraph describing your findings from the R coding challenge above. This should be geared toward an educated audience but one that is not necessarily familiar with the dataset. Then insert a horizontal rule below the paragraph. Below the horizontal rule, write another paragraph describing the next steps you might take in analyzing this dataset. What questions might you be able to answer, and what analyses would you conduct to answer those questions?
 
@@ -169,3 +153,4 @@ pdf_document:
     citation_package: natbib  
     template:  
 
+© 2020 GitHub, Inc.
